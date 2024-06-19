@@ -1,0 +1,24 @@
+# Ignorer les fichiers de configuration locaux
+wp-config.php
+
+# Ignorer les fichiers de log
+*.log
+
+# Ignorer les fichiers système
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers temporaires
+.*.swp
+
+# Ignorer les répertoires spécifiques à WordPress
+wp-content/uploads
+wp-content/upgrade
+wp-content/cache
+
+# Ne pas ignorer certains sous-répertoires spécifiques (adapté à ton projet précédent)
+!wp-content
+!wp-content/themes
+!wp-content/themes/lentreveyle
+
+
