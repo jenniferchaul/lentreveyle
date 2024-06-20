@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<section class="intro">
+<!--<section class="intro">
     <div class="intro-text flex">
         <h5 class="title-intro">Bienvenu à l'Entre Veyle</h5>
 
@@ -48,15 +48,15 @@
         <div class="intro-img">
             <div class="intro-img_left">
                 <div>
-                    <img class="img-border img1" src="assets/img/intro-img2.jpg" alt="" />
+                    <img class="img-border img1" src="<?= get_theme_file_uri('assets/images/intro-img2.jpg') ?>" alt="" />
                 </div>
                 <div>
-                    <img class="img-border img2" src="assets/img/intro-img3.jpg" alt="" />
+                    <img class="img-border img2" src="<?= get_theme_file_uri('assets/images/intro-img3.jpg') ?>" alt="" />
                 </div>
             </div>
             <div class="intro-img_right">
                 <div>
-                    <img class="img-border img3" src="assets/img/intro-img1.jpg" alt="" />
+                    <img class="img-border img3" src="<?= get_theme_file_uri('assets/images/intro-img1.jpg')?>" alt="" />
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
         <div class="container-menu-img">
             <div class="container-menu">
                 <a href="#">
-                    <img class="menu-img dish" src="assets/img/poisson.jpg" />
+                    <img class="menu-img dish" src="<?= get_theme_file_uri('assets/images/poisson.jpg') ?>" />
 
                     <h3 class="subtitle-menu">La carte</h3>
                 </a>
@@ -78,7 +78,7 @@
 
             <div class="container-menu">
                 <a href="#">
-                    <img class="menu-img" src="assets/img/boissons.jpg" />
+                    <img class="menu-img" src="<?= get_theme_file_uri('assets/images/boissons.jpg') ?>" />
 
                     <h3 class="subtitle-menu">Les boissons</h3>
                 </a>
@@ -92,7 +92,8 @@
         <h6>Notre équipe</h6>
         <div class="presentation">
             <div class="part-team img">
-                <img class="team-img" src="assets/img/team.jpg" alt="photo d'équipe" />
+                <img class="team-img" src="<?= get_theme_file_uri('assets/images/team.jpg') ?>" alt="photo d'équipe" />
+
             </div>
             <div class="part-team text">
                 <h2 class="title-intro_middle">A propos de nous</h2>
@@ -124,9 +125,9 @@
                 </p>
 
                 <div class="picto-access">
-                    <img src="assets/img/handicap.png" alt="acces handicap" />
+                    <img src="<?= get_theme_file_uri('assets/images/handicap.png') ?>" alt="acces handicap" />
 
-                    <img src="assets/img/terrasse1.png" alt="acces terrasse" />
+                    <img src="<?= get_theme_file_uri('assets/images/terrasse1.png') ?>" alt="acces terrasse" />
                 </div>
             </div>
         </div>
@@ -138,19 +139,19 @@
 
     <div class="container-gallery">
         <div class="items img-gallery1">
-            <img src="assets/img/galerie1.jpg" alt="" />
+            <img src="<?= get_theme_file_uri('assets/images/galerie1.jpg') ?>" alt="" />
         </div>
         <div class="items img-gallery2">
-            <img src="assets/img/galerie2.jpg" alt="" />
+            <img src="<?= get_theme_file_uri('assets/images/galerie2.jpg') ?>" alt="" />
         </div>
         <div class="items img-gallery3">
-            <img src="assets/img/galerie3.jpg" alt="" />
+            <img src="<?= get_theme_file_uri('assets/images/galerie3.jpg') ?>" alt="" />
         </div>
         <div class="items img-gallery4">
-            <img src="assets/img/galerie4.jpg" alt="" />
+            <img src="<?= get_theme_file_uri('assets/images/galerie4.jpg') ?>" alt="" />
         </div>
         <div class="items img-gallery5">
-            <img src="assets/img/galerie5.jpg" alt="" />
+            <img src="<?= get_theme_file_uri('assets/images/galerie5.jpg') ?>" alt="" />
         </div>
     </div>
 </section>
@@ -161,34 +162,8 @@
     <h2 class="customers-review">Les avis clients</h2>
 
     <div class="img1 valign">
-        <img src="assets/img/intro-img1.jpg" alt="" />
+        <img src="<?= get_theme_file_uri('assets/images/intro-img1.jpg') ?>" alt="" />
     </div>
 </section>
 
-<footer class="main_footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="footer_top">
-                    <div class="footer_logo">
-                        <h2>L'Entre Veyle</h2>
-                    </div>
-
-                    <div class="footer_social">
-                        <a href="">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="copyright"></div>
-</footer>
-</body>
-
-</html>
+<?php get_footer(); ?>

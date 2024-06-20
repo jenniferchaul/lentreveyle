@@ -21,22 +21,22 @@
 
 <body>
 
-    <div class="btn">
+<div class="btn">
         <img src="<?= get_theme_file_uri('assets/images/arrow.png') ?>" alt="arrow-scroll">
     </div>
 
     <header>
+        <!-- Menu de navigation -->
         <nav class="navbar">
             <div class="container">
-                <a class="logo"> href="<?= home_url('/hero') ?>"
+                <a class="logo" href="<?= home_url('/hero') ?>">
                     <img class="img-logo" src="<?= get_theme_file_uri('assets/images/logo.png') ?>" alt="logo">
                 </a>
 
-                <!-- Menu de navigation -->
-                <div id="menu" class="navbar-content">
+                <div class="navbar-content">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" href="<?= home_url('/hero') ?>">Accueil</a>
+                            <a class="nav-link active" href="<?= home_url('/#hero') ?>">Accueil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= home_url('/menus') ?>">Menus</a>
@@ -47,12 +47,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?= home_url('/contact') ?>">Contact</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link mail" href="mailto:nonoetco@gmail.fr">nonoetco@gmail.com</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link phone" href="tel:+33661246520">03 85 33 50 28</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link mail" href="mailto:nonoetco@gmail.fr">nonoetco@gmail.com</a> </li>
+                        <li class="nav-item"><a class="nav-link phone" href="tel:+33661246520">03 85 33 50 28</a></li>
                     </ul>
                 </div>
 
@@ -67,3 +63,5 @@
     <?php
 
     wp_head();
+        
+

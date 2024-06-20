@@ -1,0 +1,189 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.btn {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+header .navbar {
+  position: fixed;
+  top: -1rem;
+  height: 5rem;
+  width: 100%;
+  z-index: 2;
+  border-bottom: 2px solid #b7b095;
+  padding: 0.5rem;
+}
+header .img-logo {
+  width: 12rem;
+  position: relative;
+  bottom: 3.5rem;
+  right: 1rem;
+}
+header .navbar-content {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: red;
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  animation: slideDown 0.3s ease-in-out;
+}
+header .nav-item {
+  margin: 0 2rem;
+  position: relative;
+  display: flex;
+  height: 2rem;
+  align-items: center;
+}
+header .nav-item .nav-link.mail {
+  display: none;
+}
+header .nav-item .nav-link.phone {
+  display: none;
+}
+header .nav-item .sub-menu {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  top: 96px;
+  border-top: 2.5px solid #b7b095;
+}
+header .nav-item .sub-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  left: 0;
+  top: 163%;
+  width: 240px;
+  text-align: left;
+  z-index: 1;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+}
+header .nav-item .sub-menu ul li a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+header .nav-item .sub-menu ul li a:hover {
+  background-color: #b7b095;
+  color: red;
+}
+header .nav-item .nav-link {
+  text-decoration: none;
+  color: yellow;
+  display: inline-block;
+  transition: color 0.5s;
+}
+header .navbar-content.show {
+  display: flex;
+  align-items: end;
+  background-color: red;
+  z-index: -1;
+  width: 10rem;
+  height: 13rem;
+  padding-top: 2rem;
+  font-family: "Barlow", "sans-serif";
+}
+header .img-toggle {
+  position: relative;
+  width: 3rem;
+  float: right;
+  padding-right: 1rem;
+  top: 1.5rem;
+}
+header .menu-icon {
+  display: block;
+}
+header .close-icon {
+  display: none;
+}
+header .navbar-content.show ~ .toggle .menu-icon {
+  display: none;
+}
+header .navbar-content.show ~ .toggle .close-icon {
+  display: block;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}/*# sourceMappingURL=style.css.map */
