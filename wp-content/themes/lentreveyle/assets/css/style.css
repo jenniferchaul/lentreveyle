@@ -73,24 +73,23 @@ table {
 header .navbar {
   position: fixed;
   top: -1rem;
-  height: 5rem;
+  height: 6rem;
   width: 100%;
   z-index: 2;
   border-bottom: 2px solid #b7b095;
   padding: 0.5rem;
 }
 header .img-logo {
-  width: 12rem;
+  width: 16rem;
   position: relative;
-  bottom: 3.5rem;
-  right: 1rem;
+  bottom: 5rem;
+  right: 2rem;
 }
 header .navbar-content {
   display: none;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background: red;
   position: absolute;
   top: 7rem;
   left: 0;
@@ -144,14 +143,13 @@ header .nav-item .sub-menu ul li a:hover {
 }
 header .nav-item .nav-link {
   text-decoration: none;
-  color: yellow;
+  color: #ffffff;
   display: inline-block;
   transition: color 0.5s;
 }
 header .navbar-content.show {
   display: flex;
   align-items: end;
-  background-color: red;
   z-index: -1;
   width: 10rem;
   height: 13rem;
@@ -160,10 +158,10 @@ header .navbar-content.show {
 }
 header .img-toggle {
   position: relative;
-  width: 3rem;
+  width: 3.5rem;
   float: right;
   padding-right: 1rem;
-  top: 1.5rem;
+  top: 1.7rem;
 }
 header .menu-icon {
   display: block;
@@ -186,4 +184,104 @@ header .navbar-content.show ~ .toggle .close-icon {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.hero {
+  margin-top: 5rem;
+  position: relative;
+  width: 100%;
+  background-image: url("../images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 5rem 0.5rem;
+  height: 32rem;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1;
+}
+.hero .hero-presentation {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.hero .hero-presentation h1 {
+  font-family: "Pinyon Script", cursive;
+  font-weight: 400;
+  font-size: 42px;
+  color: #b7b095;
+}
+.hero .hero-presentation h2 {
+  font-family: "Cormorant", "serif";
+  font-size: 24px;
+  letter-spacing: 5px;
+  margin: 2rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+.hero .hero-presentation h3 {
+  font-family: "Barlow", "sans-serif";
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 300;
+  margin: 0 1rem 1rem;
+  color: #ffffff;
+  letter-spacing: 2px;
+  line-height: 20px;
+}
+.hero .hero-presentation div {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0 3rem;
+}
+.hero .hero-presentation div a {
+  background: transparent;
+  padding: 1rem 4rem;
+  min-width: 120px;
+  position: relative;
+  color: #ffffff;
+  transition: all 0.4s;
+  z-index: 3;
+  text-decoration: none;
+  font-family: "Barlow", "sans-serif";
+  line-height: 1.5;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+.hero .hero-presentation div a span {
+  position: relative;
+  z-index: 2;
+}
+.hero .hero-presentation div a i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.hero .hero-presentation div a i::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #b7b095;
+}
+.hero .hero-presentation div a i::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 2px;
+  bottom: 2px;
+  background-color: #b7b095;
 }/*# sourceMappingURL=style.css.map */

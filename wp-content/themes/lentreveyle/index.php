@@ -1,25 +1,46 @@
 <?php get_header(); ?>
 
-<div class="background-container">
-    <div class="background-text">
+<section id="hero" class="hero">
+
+    <div class="hero-presentation">
+
         <h1>L'Entre Veyle</h1>
 
-        <h3>Savourer l'authenticité de la cuisine maison</h3>
+        <h2>Savourer l'authenticité de la cuisine maison</h2>
 
-        <h5 class="background-text_small">
+        <h3>
             Explorez nos menus variés et délicieux
-        </h5>
+        </h3>
 
-        <div class="btn-header">
-            <div class="border-btn border-menu">
-                <a href="#" class="button-header_item btn-menu">Menus de la semaine</a>
-            </div>
-            <div class="border-btn border-menu">
-                <a href="#" class="button-header_item btn-menu">Menus du week-end</a>
-            </div>
+        <div>
+
+        <a href="#" class="hero-btn">
+            <span>Menu de la semaine</span>
+            <i>
+            </i>
+        </a>
+
+        <a href="#" class="hero-btn">
+            <span>Menu du week-end</span>
+            <i>
+                
+            </i>
+        </a>
+
         </div>
+
+        <!--<div class="hero-buttons">
+        <!--    <div class="border-btn border-menu">
+        <!--        <a href="#" class="button-header_item btn-menu">Menus de la semaine</a>
+        <!--    </div>
+<!--
+        <!--    <div class="border-btn border-menu">
+        <!--        <a href="#" class="button-header_item btn-menu">Menus du week-end</a>
+        <!--    </div>
+        <!--</div>-->
     </div>
-</div>
+
+</section>
 
 <!--<section class="intro">
     <div class="intro-text flex">
@@ -56,7 +77,7 @@
             </div>
             <div class="intro-img_right">
                 <div>
-                    <img class="img-border img3" src="<?= get_theme_file_uri('assets/images/intro-img1.jpg')?>" alt="" />
+                    <img class="img-border img3" src="<?= get_theme_file_uri('assets/images/intro-img1.jpg') ?>" alt="" />
                 </div>
             </div>
         </div>
