@@ -159,7 +159,6 @@
 
             </div>
 
-            <?php echo do_shortcode("[fdm-menu id='30']"); ?>
 
 
             <div class="part-team img">

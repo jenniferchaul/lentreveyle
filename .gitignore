@@ -21,4 +21,9 @@ wp-content/cache
 !wp-content/themes
 !wp-content/themes/lentreveyle
 
+wp-content/plugins/**
+!wp-content/plugins/
+!wp-content/plugins/menu-restaurant
+!wp-content/plugins/menu
+
 
