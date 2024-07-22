@@ -4,10 +4,10 @@
 add_action('after_setup_theme', 'lentreveyle_initializeTheme');
 
 // Retirez l'ancien hook utilisant the_block_template_skip_link().
-remove_action('wp_footer', 'the_block_template_skip_link' );
+remove_action('wp_footer', 'the_block_template_skip_link');
 
 // Ajoutez le nouveau hook utilisant wp_enqueue_block_template_skip_link().
-add_action('wp_footer', 'wp_enqueue_block_template_skip_link' );
+add_action('wp_footer', 'wp_enqueue_block_template_skip_link');
 
 if (!function_exists('lentreveyle_initializeTheme')) {
     function lentreveyle_initializeTheme()
@@ -58,5 +58,5 @@ add_action('wp_enqueue_scripts', function() {
         '1.0.0', // Version du script JavaScript
         true // Le script sera placé dans le footer
     );
-});
 
+});
