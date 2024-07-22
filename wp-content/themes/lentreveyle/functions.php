@@ -60,3 +60,113 @@ add_action('wp_enqueue_scripts', function() {
     );
 });
 
+function enqueue_filter_scripts() {
+    wp_enqueue_script('main-js', get_template_directory_uri() . '/js/main.js', array('jquery'), null, true);
+    wp_localize_script('main-js', 'ajax_filter_params', array(
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
+}
+add_action('wp_enqueue_scripts', 'enqueue_filter_scripts');
+
+
+function ajax_filter_posts() {
+    $menu = isset($_POST['menu']) ? sanitize_text_field($_POST['menu']) : '';
+    $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+    $tax_query = array();
+
+    if (!empty($menu)) {
+        $tax_query[] = array(
+            'taxonomy' => 'main-menu',
+            'field' => 'slug',
+            'terms' => $menu
+        );
+    }
+
+    if (!empty($category)) {
+        $tax_query[] = array(
+            'taxonomy' => 'category',
+            'field' => 'slug',
+            'terms' => $category
+        );
+    }
+
+    $args = array(
+        'post_type' => 'dish',
+        'tax_query' => $tax_query,
+        'posts_per_page' => -1,
+        'meta_key' => 'order',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC'
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $price = get_post_meta(get_the_ID(), 'price', true); // Assuming 'price' is the meta key
+            ?>
+            <div class="plat-card">
+                <h2><?php the_title(); ?></h2>
+                <div class="plat-content">
+                    <?php the_excerpt(); ?>
+                    <?php if ($price) : ?>
+                        <p class="plat-price">Prix: <?php echo esc_html($price); ?> €</p>
+                    <?php endif; ?>
+                </div>
+                <!--<a href="<?php the_permalink(); ?>" class="view-details">Voir les détails</a>-->
+            </div>
+            <?php
+        }
+    } else {
+        echo '<p>Aucun plat trouvé.</p>';
+    }
+
+    wp_die();
+}
+
+add_action('wp_ajax_filter_posts', 'ajax_filter_posts');
+add_action('wp_ajax_nopriv_filter_posts', 'ajax_filter_posts');
+
+
+
+function ajax_get_categories() {
+    $menu = isset($_POST['menu']) ? sanitize_text_field($_POST['menu']) : '';
+
+    if (!empty($menu)) {
+        $args = array(
+            'post_type' => 'dish',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'main-menu',
+                    'field' => 'slug',
+                    'terms' => $menu
+                )
+            ),
+            'posts_per_page' => -1,
+            'fields' => 'ids'
+        );
+
+        $query = new WP_Query($args);
+        $post_ids = $query->posts;
+
+        if (!empty($post_ids)) {
+            $category_terms = wp_get_object_terms($post_ids, 'category', array('orderby' => 'name', 'order' => 'ASC'));
+
+            if (!empty($category_terms) && !is_wp_error($category_terms)) {
+                foreach ($category_terms as $term) {
+                    $active_class = ($term->slug == 'entree') ? 'active' : '';
+                    echo '<button data-category="' . esc_js($term->slug) . '" class="' . $active_class . '">' . esc_html($term->name) . '</button>';
+                }
+            }
+        } else {
+            echo '<p>Aucune catégorie disponible pour ce menu.</p>';
+        }
+    }
+
+    wp_die();
+}
+
+add_action('wp_ajax_get_categories', 'ajax_get_categories');
+add_action('wp_ajax_nopriv_get_categories', 'ajax_get_categories');

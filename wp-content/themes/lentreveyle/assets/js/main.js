@@ -84,3 +84,76 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+jQuery(document).ready(function($) {
+    $('.menu-buttons button').on('click', function() {
+        var menu = $(this).data('menu');
+
+        var data = {
+            action: 'filter_posts',
+            menu: menu
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                $('#plats-grid').html(response);
+                // Mettre à jour les catégories dynamiquement
+                updateCategories(menu);
+            }
+        });
+    });
+
+    $(document).on('click', '.category-buttons button', function() {
+        var category = $(this).data('category');
+        var menu = $('.menu-buttons button.active').data('menu'); // Utilisez le menu actif
+
+        var data = {
+            action: 'filter_posts',
+            menu: menu,
+            category: category
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                $('#plats-grid').html(response);
+            }
+        });
+    });
+
+    // Ajouter une classe active aux boutons
+    $('.menu-buttons button').on('click', function() {
+        $('.menu-buttons button').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $(document).on('click', '.category-buttons button', function() {
+        $('.category-buttons button').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    // Fonction pour mettre à jour les catégories
+    function updateCategories(menu) {
+        var data = {
+            action: 'get_categories',
+            menu: menu
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                $('.category-buttons').html(response);
+                // Déclencher automatiquement le clic sur "Entrée"
+                $('.category-buttons button[data-category="entree"]').click();
+            }
+        });
+    }
+});
+
