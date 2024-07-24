@@ -1114,6 +1114,7 @@ footer {
                     ul {
                         display: flex;
                         justify-content: center;
+
                         a {
                             text-decoration: none;
                             color: $first-color;
@@ -1131,5 +1132,233 @@ footer {
 /* ====================== [ Page menu ] ====================== */
 
 .plats-container {
-    padding-top: 6rem;
+    padding-top: 28rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    bottom: 19rem;
+    margin-bottom: -12rem;
+
+    h1 {
+        font-family: $main-font;
+        color: $first-color;
+        font-size: 28px;
+    }
+
+    .cards-bx {
+        display: flex;
+        padding: 3.5rem 1rem 2rem;
+
+        .img-card {
+            margin: 2rem;
+            overflow: hidden; /* Ensure the zoomed image does not overflow */
+            img {
+                width: 25rem;
+                height: 20rem;
+                transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+            }
+        }
+    }
+}
+
+.card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    &.active .card-title {
+        color: $first-color;
+
+        &:after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: $first-color;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
+    }
+
+    &:hover .img-card img,
+    &:hover .card-title,
+    &:hover .card-title-container h3 {
+        transform: scale(1.1); /* Zoom effect */
+        color: $first-color;
+    }
+}
+
+.img-card {
+    position: relative;
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+    }
+}
+
+.card-title-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+
+    h3 {
+        font-family: $second-font;
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.5em; /* Taille de la police */
+        color: #fff; /* Couleur du texte */
+        text-align: center;
+        padding: 10px;
+        position: relative;
+        transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+
+        &:hover {
+            color: $first-color;
+            transform: scale(1.1); /* Zoom effect */
+        }
+
+        &.active {
+            color: $first-color;
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: $first-color;
+            }
+        }
+    }
+}
+
+.category-links {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+
+    a {
+        font-family: $second-font;
+        font-weight: 700;
+        margin: 0 1rem;
+        font-size: 30px;
+        color: #000;
+        text-decoration: none;
+        position: relative;
+
+        &:hover {
+            color: $first-color;
+        }
+
+        &.active {
+            color: $first-color;
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: $first-color;
+            }
+        }
+    }
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.5em; /* Taille de la police */
+    color: #fff; /* Couleur du texte */
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+}
+
+/* Styles pour les plats */
+#plats-grid {
+    display: none; /* Masquer par défaut */
+    width: 40rem;
+    height: 42rem;
+    max-width: 1200px;
+    background-repeat: no-repeat;
+    background-size: 109% 115%;
+    background-position: center;
+    padding: 6rem 2.5rem;
+    //min-height: 795px; /* Hauteur minimale pour garantir une taille constante */
+    background-image: none; /* Par défaut, pas de fond */
+
+    &.has-plats {
+        display: block; /* Afficher lorsque les plats sont chargés */
+        background-image: url("../images/1.png"); /* Afficher le fond lorsque les plats sont chargés */
+    }
+
+    .plat-card {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+
+        .plat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            width: 100%;
+            padding: 0.5rem 0;
+
+            .plat-title {
+                font-family: $second-font;
+                font-size: 25px;
+                color: $first-color;
+                text-decoration: none;
+                transition: color 0.2s;
+                font-weight: 600;
+            }
+
+            .menu-line {
+                flex-grow: 1;
+                border-bottom: 1px dotted $first-color;
+                margin: 0 14px;
+                align-self: center;
+            }
+
+            .plat-price {
+                font-family: $second-font;
+                font-size: 25px;
+                font-weight: 700;
+                color: $fourth-color;
+                align-self: center;
+            }
+        }
+
+        .plat-description {
+            font-family: $main-font;
+            font-size: 0.9em;
+            color: #000;
+            margin-top: 0.3rem;
+        }
+
+        p {
+            font-family: $second-font;
+            font-size: 20px;
+            font-weight: 300;
+            color: $fourth-color;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .plat-card {
+            width: 100%;
+        }
+    }
 }

@@ -60,6 +60,58 @@ add_action('wp_enqueue_scripts', function() {
     );
 });
 
+// Ajouter le champ personnalisé pour l'image à la page de création et d'édition des termes de taxonomie
+function add_menu_image_field() {
+    ?>
+    <div class="form-field">
+        <label for="menu_image"><?php _e('Menu Image', 'textdomain'); ?></label>
+        <input type="button" class="button button-secondary" id="upload_image_button" value="<?php _e('Upload Image', 'textdomain'); ?>" />
+        <input type="hidden" name="menu_image" id="menu_image" value="" />
+        <div id="image_preview" style="margin-top: 10px;"></div>
+    </div>
+    <?php
+}
+add_action('main-menu_add_form_fields', 'add_menu_image_field', 10, 2);
+
+function edit_menu_image_field($term) {
+    $image_id = get_term_meta($term->term_id, 'menu_image', true);
+    $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
+    ?>
+    <tr class="form-field">
+        <th scope="row" valign="top"><label for="menu_image"><?php _e('Menu Image', 'textdomain'); ?></label></th>
+        <td>
+            <input type="button" class="button button-secondary" id="upload_image_button" value="<?php _e('Upload Image', 'textdomain'); ?>" />
+            <input type="hidden" name="menu_image" id="menu_image" value="<?php echo esc_attr($image_id); ?>" />
+            <div id="image_preview" style="margin-top: 10px;">
+                <?php if ($image_url) : ?>
+                    <img src="<?php echo esc_url($image_url); ?>" alt="" style="max-width: 300px;" />
+                <?php endif; ?>
+            </div>
+        </td>
+    </tr>
+    <?php
+}
+add_action('main-menu_edit_form_fields', 'edit_menu_image_field', 10, 2);
+
+// Enregistrer le champ personnalisé
+function save_menu_image_meta($term_id) {
+    if (isset($_POST['menu_image']) && '' !== $_POST['menu_image']) {
+        $image_id = intval($_POST['menu_image']);
+        update_term_meta($term_id, 'menu_image', $image_id);
+    } else {
+        delete_term_meta($term_id, 'menu_image');
+    }
+}
+add_action('created_main-menu', 'save_menu_image_meta', 10, 2);
+add_action('edited_main-menu', 'save_menu_image_meta', 10, 2);
+
+// Charger le script de la médiathèque
+function load_wp_media_files() {
+    wp_enqueue_media();
+    wp_enqueue_script('admin-js', get_template_directory_uri() . '/assets/js/admin.js', array('jquery'), null, true);
+}
+add_action('admin_enqueue_scripts', 'load_wp_media_files');
+
 function enqueue_filter_scripts() {
     wp_enqueue_script('main-js', get_template_directory_uri() . '/js/main.js', array('jquery'), null, true);
     wp_localize_script('main-js', 'ajax_filter_params', array(
@@ -67,7 +119,6 @@ function enqueue_filter_scripts() {
     ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_filter_scripts');
-
 
 function ajax_filter_posts() {
     $menu = isset($_POST['menu']) ? sanitize_text_field($_POST['menu']) : '';
@@ -108,14 +159,14 @@ function ajax_filter_posts() {
             $price = get_post_meta(get_the_ID(), 'price', true); // Assuming 'price' is the meta key
             ?>
             <div class="plat-card">
-                <h2><?php the_title(); ?></h2>
-                <div class="plat-content">
-                    <?php the_excerpt(); ?>
+                <div class="plat-header">
+                    <h2 class="plat-title"><?php the_title(); ?></h2>
+                    <span class="menu-line"></span>
                     <?php if ($price) : ?>
-                        <p class="plat-price">Prix: <?php echo esc_html($price); ?> €</p>
+                        <p class="plat-price"><?php echo esc_html($price); ?> €</p>
                     <?php endif; ?>
                 </div>
-                <!--<a href="<?php the_permalink(); ?>" class="view-details">Voir les détails</a>-->
+                <p class="plat-description"><?php the_excerpt(); ?></p>
             </div>
             <?php
         }
@@ -128,6 +179,7 @@ function ajax_filter_posts() {
 
 add_action('wp_ajax_filter_posts', 'ajax_filter_posts');
 add_action('wp_ajax_nopriv_filter_posts', 'ajax_filter_posts');
+
 
 
 
@@ -157,7 +209,7 @@ function ajax_get_categories() {
             if (!empty($category_terms) && !is_wp_error($category_terms)) {
                 foreach ($category_terms as $term) {
                     $active_class = ($term->slug == 'entree') ? 'active' : '';
-                    echo '<button data-category="' . esc_js($term->slug) . '" class="' . $active_class . '">' . esc_html($term->name) . '</button>';
+                    echo '<a href="#" data-category="' . esc_js($term->slug) . '" class="' . $active_class . '">' . esc_html($term->name) . '</a>';
                 }
             }
         } else {

@@ -86,7 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 jQuery(document).ready(function($) {
-    $('.menu-buttons button').on('click', function() {
+    // Clic sur une card de menu
+    $('.cards-bx').on('click', '.card', function(e) {
+        e.preventDefault();
         var menu = $(this).data('menu');
 
         var data = {
@@ -99,16 +101,32 @@ jQuery(document).ready(function($) {
             data: data,
             type: 'POST',
             success: function(response) {
-                $('#plats-grid').html(response);
+                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                    $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
+                } else {
+                    $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
+                }
                 // Mettre à jour les catégories dynamiquement
                 updateCategories(menu);
+
+                // Défilement vers les catégories et plats
+                var offset = $('#categories-anchor').offset().top - 100; // Ajustez le décalage ici
+                $('html, body').animate({
+                    scrollTop: offset
+                }, 500); // La durée du défilement en millisecondes
             }
         });
+
+        // Ajouter une classe active aux cards
+        $('.card').removeClass('active');
+        $(this).addClass('active');
     });
 
-    $(document).on('click', '.category-buttons button', function() {
+    // Clic sur une catégorie
+    $(document).on('click', '.category-links a', function(e) {
+        e.preventDefault();
         var category = $(this).data('category');
-        var menu = $('.menu-buttons button.active').data('menu'); // Utilisez le menu actif
+        var menu = $('.card.active').data('menu'); // Utilisez le menu actif
 
         var data = {
             action: 'filter_posts',
@@ -121,19 +139,16 @@ jQuery(document).ready(function($) {
             data: data,
             type: 'POST',
             success: function(response) {
-                $('#plats-grid').html(response);
+                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                    $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
+                } else {
+                    $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
+                }
             }
         });
-    });
 
-    // Ajouter une classe active aux boutons
-    $('.menu-buttons button').on('click', function() {
-        $('.menu-buttons button').removeClass('active');
-        $(this).addClass('active');
-    });
-
-    $(document).on('click', '.category-buttons button', function() {
-        $('.category-buttons button').removeClass('active');
+        // Ajouter une classe active aux liens de catégories
+        $('.category-links a').removeClass('active');
         $(this).addClass('active');
     });
 
@@ -149,11 +164,97 @@ jQuery(document).ready(function($) {
             data: data,
             type: 'POST',
             success: function(response) {
-                $('.category-buttons').html(response);
+                $('.category-links').html(response);
                 // Déclencher automatiquement le clic sur "Entrée"
-                $('.category-buttons button[data-category="entree"]').click();
+                $('.category-links a[data-category="entrees"]').click();
             }
         });
     }
 });
 
+jQuery(document).ready(function($) {
+    // Function to handle menu button click
+    $('.cards-bx .card').on('click', function(e) {
+        e.preventDefault();
+        $('.cards-bx .card').removeClass('active');
+        $(this).addClass('active');
+        $('.cards-bx .card-title').removeClass('active'); // Remove active class from all h3
+        $(this).find('.card-title').addClass('active'); // Add active class to clicked h3
+
+        var menu = $(this).data('menu');
+
+        var data = {
+            action: 'filter_posts',
+            menu: menu
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                    $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
+                } else {
+                    $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
+                }
+                // Update categories dynamically
+                updateCategories(menu);
+
+                // Défilement vers les catégories et plats
+                var offset = $('#categories-anchor').offset().top - 100; // Ajustez le décalage ici
+                $('html, body').animate({
+                    scrollTop: offset
+                }, 500); // La durée du défilement en millisecondes
+            }
+        });
+    });
+
+    // Function to handle category link click
+    $(document).on('click', '.category-links a', function(e) {
+        e.preventDefault();
+        $('.category-links a').removeClass('active');
+        $(this).addClass('active');
+
+        var category = $(this).data('category');
+        var menu = $('.cards-bx .card.active').data('menu');
+
+        var data = {
+            action: 'filter_posts',
+            menu: menu,
+            category: category
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                    $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
+                } else {
+                    $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
+                }
+            }
+        });
+    });
+
+    // Function to update categories
+    function updateCategories(menu) {
+        var data = {
+            action: 'get_categories',
+            menu: menu
+        };
+
+        $.ajax({
+            url: ajax_filter_params.ajax_url,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                $('.category-links').html(response);
+                // Automatically click the first category
+                $('.category-links a').first().click();
+            }
+        });
+    }
+});

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -1007,5 +1008,208 @@ footer .container .ftail .container .legale-notices ul a {
 
 /* ====================== [ Page menu ] ====================== */
 .plats-container {
-  padding-top: 6rem;
+  padding-top: 28rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  bottom: 19rem;
+  margin-bottom: -12rem;
+}
+.plats-container h1 {
+  font-family: "Barlow", "sans-serif";
+  color: #b7b095;
+  font-size: 28px;
+}
+.plats-container .cards-bx {
+  display: flex;
+  padding: 3.5rem 1rem 2rem;
+}
+.plats-container .cards-bx .img-card {
+  margin: 2rem;
+  overflow: hidden; /* Ensure the zoomed image does not overflow */
+}
+.plats-container .cards-bx .img-card img {
+  width: 25rem;
+  height: 20rem;
+  transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+}
+
+.card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.card.active .card-title {
+  color: #b7b095;
+}
+.card.active .card-title:after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #b7b095;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+.card:hover .img-card img, .card:hover .card-title, .card:hover .card-title-container h3 {
+  transform: scale(1.1); /* Zoom effect */
+  color: #b7b095;
+}
+
+.img-card {
+  position: relative;
+}
+.img-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+}
+
+.card-title-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+.card-title-container h3 {
+  font-family: "Cormorant", "serif";
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.5em; /* Taille de la police */
+  color: #fff; /* Couleur du texte */
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+}
+.card-title-container h3:hover {
+  color: #b7b095;
+  transform: scale(1.1); /* Zoom effect */
+}
+.card-title-container h3.active {
+  color: #b7b095;
+}
+.card-title-container h3.active:after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #b7b095;
+}
+
+.category-links {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+.category-links a {
+  font-family: "Cormorant", "serif";
+  font-weight: 700;
+  margin: 0 1rem;
+  font-size: 30px;
+  color: #000;
+  text-decoration: none;
+  position: relative;
+}
+.category-links a:hover {
+  color: #b7b095;
+}
+.category-links a.active {
+  color: #b7b095;
+}
+.category-links a.active:after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #b7b095;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.5em; /* Taille de la police */
+  color: #fff; /* Couleur du texte */
+  text-align: center;
+  padding: 10px;
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+}
+
+/* Styles pour les plats */
+#plats-grid {
+  display: none; /* Masquer par défaut */
+  width: 40rem;
+  height: 42rem;
+  max-width: 1200px;
+  background-repeat: no-repeat;
+  background-size: 109% 115%;
+  background-position: center;
+  padding: 6rem 2.5rem;
+  background-image: none; /* Par défaut, pas de fond */
+}
+#plats-grid.has-plats {
+  display: block; /* Afficher lorsque les plats sont chargés */
+  background-image: url("../images/1.png"); /* Afficher le fond lorsque les plats sont chargés */
+}
+#plats-grid .plat-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+#plats-grid .plat-card .plat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+#plats-grid .plat-card .plat-header .plat-title {
+  font-family: "Cormorant", "serif";
+  font-size: 25px;
+  color: #b7b095;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 600;
+}
+#plats-grid .plat-card .plat-header .menu-line {
+  flex-grow: 1;
+  border-bottom: 1px dotted #b7b095;
+  margin: 0 14px;
+  align-self: center;
+}
+#plats-grid .plat-card .plat-header .plat-price {
+  font-family: "Cormorant", "serif";
+  font-size: 25px;
+  font-weight: 700;
+  color: #18181d;
+  align-self: center;
+}
+#plats-grid .plat-card .plat-description {
+  font-family: "Barlow", "sans-serif";
+  font-size: 0.9em;
+  color: #000;
+  margin-top: 0.3rem;
+}
+#plats-grid .plat-card p {
+  font-family: "Cormorant", "serif";
+  font-size: 20px;
+  font-weight: 300;
+  color: #18181d;
+}
+@media (max-width: 768px) {
+  #plats-grid .plat-card {
+    width: 100%;
+  }
 }/*# sourceMappingURL=style.css.map */
