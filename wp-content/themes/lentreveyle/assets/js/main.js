@@ -55,34 +55,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Swiper initialization
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 1,
-        spaceBetween: 10,
-        loop: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
+// Swiper initialization
+var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 1, // Une seule carte visible sur mobile par défaut
+    spaceBetween: 10,
+    loop: true,
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+        // A partir de 640px
+        640: {
+            slidesPerView: 1, // Toujours une seule carte jusqu'à 640px
+            spaceBetween: 10,
         },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+        // A partir de 768px
+        768: {
+            slidesPerView: 2, // Deux cartes à partir de 768px
+            spaceBetween: 20,
         },
-        breakpoints: {
-            640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-            },
-            768: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-            },
-            1024: {
-                slidesPerView: 4,
-                spaceBetween: 40,
-            },
-        }
-    });
+        // A partir de 1024px
+        1024: {
+            slidesPerView: 3, // Trois cartes à partir de 1024px
+            spaceBetween: 30,
+        },
+        // A partir de 1200px
+        1200: {
+            slidesPerView: 4, // Quatre cartes à partir de 1200px
+            spaceBetween: 40,
+        },
+    }
+});
+
 });
 
 jQuery(document).ready(function($) {
@@ -90,6 +99,7 @@ jQuery(document).ready(function($) {
     $('.cards-bx').on('click', '.card', function(e) {
         e.preventDefault();
         var menu = $(this).data('menu');
+        var menuTitle = $(this).find('.card-title').text(); // Récupère le titre de la card
 
         var data = {
             action: 'filter_posts',
@@ -114,6 +124,9 @@ jQuery(document).ready(function($) {
                 $('html, body').animate({
                     scrollTop: offset
                 }, 500); // La durée du défilement en millisecondes
+
+                // Mettre à jour le titre du menu sélectionné
+                $('.selected-menu-title').text(menuTitle);
             }
         });
 
@@ -193,7 +206,7 @@ jQuery(document).ready(function($) {
             data: data,
             type: 'POST',
             success: function(response) {
-                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                if (response.trim() !== '<p>Aucun plat trouvé.</p>') {
                     $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
                 } else {
                     $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
@@ -201,11 +214,11 @@ jQuery(document).ready(function($) {
                 // Update categories dynamically
                 updateCategories(menu);
 
-                // Défilement vers les catégories et plats
-                var offset = $('#categories-anchor').offset().top - 100; // Ajustez le décalage ici
+                // Scroll to categories and plats
+                var offset = $('#categories-anchor').offset().top - 100; // Adjust offset here
                 $('html, body').animate({
                     scrollTop: offset
-                }, 500); // La durée du défilement en millisecondes
+                }, 500); // Scroll duration in milliseconds
             }
         });
     });
@@ -219,6 +232,15 @@ jQuery(document).ready(function($) {
         var category = $(this).data('category');
         var menu = $('.cards-bx .card.active').data('menu');
 
+        // Hide all formula contents when a category is clicked
+        hideAllFormulas();
+
+        if (category === 'formule-entre-veyle' || category === 'menu-du-jour' || category === 'menu-enfant' ||
+            category === 'menu-entre-veyle' || category === 'menu-grenouilles' || category === 'menu-gourmand' || category === 'soiree-creole') {
+            displayStaticMenu(category);
+            return;
+        }
+
         var data = {
             action: 'filter_posts',
             menu: menu,
@@ -230,7 +252,7 @@ jQuery(document).ready(function($) {
             data: data,
             type: 'POST',
             success: function(response) {
-                if(response.trim() !== '<p>Aucun plat trouvé.</p>') {
+                if (response.trim() !== '<p>Aucun plat trouvé.</p>') {
                     $('#plats-grid').html(response).removeClass('empty').addClass('has-plats').show();
                 } else {
                     $('#plats-grid').html(response).addClass('empty').removeClass('has-plats').hide();
@@ -238,6 +260,17 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    // Function to display static menus
+    function displayStaticMenu(category) {
+        $('.formule-content').hide(); // Hide all formula contents
+        $('#' + category).show(); // Show the selected formula content
+    }
+
+    // Function to hide all formula contents
+    function hideAllFormulas() {
+        $('.formule-content').hide();
+    }
 
     // Function to update categories
     function updateCategories(menu) {
@@ -258,3 +291,48 @@ jQuery(document).ready(function($) {
         });
     }
 });
+
+//jQuery(document).ready(function($) {
+//    // Charger les catégories de boissons
+//    function loadCategories() {
+//        var data = {
+//            action: 'get_boisson_categories'
+//        };
+//
+//        $.ajax({
+//            url: ajax_filter_params.ajax_url,
+//            data: data,
+//            type: 'POST',
+//            success: function(response) {
+//                $('.category-links').html(response);
+//            }
+//        });
+//    }
+//
+//    // Charger les boissons en fonction de la catégorie sélectionnée
+//    $('.category-links').on('click', 'a', function(e) {
+//        e.preventDefault();
+//        var category = $(this).data('category');
+//
+//        var data = {
+//            action: 'filter_boissons',
+//            category: category
+//        };
+//
+//        $.ajax({
+//            url: ajax_filter_params.ajax_url,
+//            data: data,
+//            type: 'POST',
+//            success: function(response) {
+//                $('#boissons-grid').html(response).removeClass('empty').addClass('has-boissons').show();
+//            }
+//        });
+//
+//        // Ajouter la classe active
+//        $('.category-links a').removeClass('active');
+//        $(this).addClass('active');
+//    });
+//
+//    // Initialiser en chargeant les catégories
+//    loadCategories();
+//});

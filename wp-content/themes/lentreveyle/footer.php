@@ -2,17 +2,17 @@
     <div class="container">
         <div class="row-social">
             <div class="logo">
-                <a class="logo" href="<?= home_url('/hero') ?>">
+                <a class="logo" href="<?= home_url('/') ?>">
                     <img class="img-logo" src="<?= get_theme_file_uri('assets/images/lentreveyle.png') ?>" alt="logo">
                 </a>
             </div>
 
             <div class="social">
-                <a href="#">
-                    <img src="<?= get_theme_file_uri('assets/images/facebook-24.png') ?>" alt="link facebook">
+                <a href="https://www.facebook.com/lentre.veyle" target="_blank" rel="noopener noreferrer">
+                    <img class="facebook" src="<?= get_theme_file_uri('assets/images/facebook-24.png') ?>" alt="link facebook">
                 </a>
-                <a href="#">
-                    <img src="<?= get_theme_file_uri('assets/images/tripadvisor-24.png') ?>" alt="link tripadvisor">
+                <a href="https://www.tripadvisor.fr/Restaurant_Review-g6826477-d7078128-Reviews-L_Entre_Veyle-Grieges_Ain_Auvergne_Rhone_Alpes.html" target="_blank" rel="noopener noreferrer">
+                    <img class="tripadvisor" src="<?= get_theme_file_uri('assets/images/tripadvisor-24.png') ?>" alt="link tripadvisor">
                 </a>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
                     <li>
                         <div class="title">
-                            email
+                            Email
                         </div>
                         <div class="dots"></div>
                         <span>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="dots"></div>
                         <span>
-                            01290 Grièges
+                            17 Rue Marie Joseph Bonnat - 01290 Grièges
                         </span>
                     </li>
                 </ul>
@@ -59,7 +59,7 @@
                 <ul>
                     <li>
                         <div class="title">
-                            Mardi au vendredi
+                            Mardi au vendredi - Dimanche
                         </div>
                         <div class="dots"></div>
                         <span>
@@ -73,7 +73,7 @@
                         </div>
                         <div class="dots"></div>
                         <span>
-                            19:00 - 22:00
+                            Nous consulter
                         </span>
                     </li>
 
@@ -90,12 +90,6 @@
 
             </div>
 
-            <div class="col">
-                <h3>Newsletter</h3>
-                <p>Abonnez-vous à notre newsletter et recevez les dernières nouvelles et nos événements à venir directement dans votre boite mail</p>
-                <?php echo do_shortcode('[wpforms id="12" title="false"]');
-                ?>
-            </div>
         </div>
 
 
