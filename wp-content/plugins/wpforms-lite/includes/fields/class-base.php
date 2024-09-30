@@ -4,6 +4,7 @@
 use \WPForms\Forms\Fields\Base\Frontend as FrontendBase;
 use WPForms\Forms\Fields\Helpers\RequirementsAlerts;
 use WPForms\Forms\IconChoices;
+use WPForms\Integrations\AI\Helpers as AIHelpers;
 
 /**
  * Base field template.
@@ -362,6 +363,17 @@ abstract class WPForms_Field {
 
 			if ( ! empty( $raw_value ) ) {
 				$this->field_prefill_remove_choices_defaults( $field, $properties );
+
+				if (
+					is_string( $raw_value ) &&
+					in_array(
+						$field['type'],
+						wpforms_get_multi_fields(),
+						true
+					)
+				) {
+					$raw_value = explode( '|', rawurldecode( $raw_value ) );
+				}
 			}
 
 			/*
@@ -378,6 +390,8 @@ abstract class WPForms_Field {
 			 *      ?wpf771_19[]=test1&wpf771_19[]=test2
 			 *      ?wpf771_19_value[]=test1&wpf771_19_value[]=test2
 			 *      ?wpf771_41_r3_c2[]=1&wpf771_41_r1_c4[]=1
+			 * We support also pipe-separated values like this:
+			 *      ?wpf771_19=test1|test2
 			 */
 			if ( is_array( $raw_value ) ) {
 				foreach ( $raw_value as $single_value ) {
@@ -571,15 +585,64 @@ abstract class WPForms_Field {
 		}
 
 		// Redefine default choice only if population value has changed anything.
-		if ( null !== $default_key ) {
-			foreach ( $field['choices'] as $choice_key => $choice_arr ) {
-				if ( $choice_key === $default_key ) {
-					$properties['inputs'][ $choice_key ]['default']              = true;
-					$properties['inputs'][ $choice_key ]['container']['class'][] = 'wpforms-selected';
-					break;
-				}
+		if ( $default_key === null ) {
+			return $properties;
+		}
+
+		foreach ( $field['choices'] as $choice_key => $choice_arr ) {
+			if ( $choice_key === $default_key ) {
+				$properties['inputs'][ $choice_key ]['default']              = true;
+				$properties['inputs'][ $choice_key ]['container']['class'][] = 'wpforms-selected';
+
+				$properties = $this->add_quantity_to_populated_field_properties( $properties, $field );
+
+				break;
 			}
 		}
+
+		return $properties;
+	}
+
+	/**
+	 * Handle dropdown items field with quantities.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param array $properties Field properties.
+	 * @param array $field      Current field specific data.
+	 *
+	 * @return array
+	 */
+	private function add_quantity_to_populated_field_properties( $properties, $field ): array {
+
+		$properties = (array) $properties;
+
+		if (
+			empty( $this->form_data['id'] ) ||
+			empty( $field['id'] ) ||
+			empty( $field['type'] ) ||
+			empty( $field['enable_quantity'] ) ||
+			! (bool) $field['enable_quantity'] ||
+			$field['type'] !== 'payment-select'
+		) {
+			return $properties;
+		}
+
+		$quantity_key = 'wpq' . $this->form_data['id'] . '_' . $field['id'];
+
+		// phpcs:disable WordPress.Security.NonceVerification
+		if ( empty( $_GET[ $quantity_key ] ) ) {
+			return $properties;
+		}
+
+		$quantity = absint( $_GET[ $quantity_key ] );
+		// phpcs:enable WordPress.Security.NonceVerification
+
+		if ( $quantity > ( $field['max_quantity'] ?? 10 ) || $quantity < ( $field['min_quantity'] ?? 0 ) ) {
+			return $properties;
+		}
+
+		$properties['quantity'] = $quantity;
 
 		return $properties;
 	}
@@ -610,7 +673,7 @@ abstract class WPForms_Field {
 		 */
 		// Do not populate if there are errors for that field.
 		/*
-		$errors = wpforms()->get( 'process' )->errors;
+		$errors = wpforms()->obj( 'process' )->errors;
 		if ( ! empty( $errors[ $this->form_data['id'] ][ $field['id'] ] ) ) {
 			$allowed = false;
 		}
@@ -915,6 +978,19 @@ abstract class WPForms_Field {
 
 				$output = $this->field_element( 'text', $field, $args, $echo );
 				break;
+
+			// Button.
+			case 'button':
+				$class .= ' wpforms-btn';
+				$output = sprintf(
+					'<button type="button" class="%1$s" id="wpforms-field-option-%2$d-%3$s" %4$s>%5$s</button>',
+					$class,
+					$id,
+					$slug,
+					$attrs,
+					$args['value']
+				);
+				break;
 		}
 
 		if ( ! $echo ) {
@@ -1197,6 +1273,10 @@ abstract class WPForms_Field {
 					$field_type = 'checkbox';
 				}
 
+				if ( ! AIHelpers::is_disabled() ) {
+					$class[] = 'wpforms-ai-choices';
+				}
+
 				if ( ! empty( $field['show_values'] ) ) {
 					$class[] = 'show-values';
 				}
@@ -1260,7 +1340,7 @@ abstract class WPForms_Field {
 					$fld .= sprintf(
 						'<input type="text" name="%s[label]" value="%s" class="label">',
 						esc_attr( $base ),
-						esc_attr( $label )
+						$this->esc_attr_brackets( $label )
 					);
 					$fld .= '<a class="add" href="#"><i class="fa fa-plus-circle"></i></a><a class="remove" href="#"><i class="fa fa-minus-circle"></i></a>';
 					$fld .= sprintf(
@@ -1658,7 +1738,7 @@ abstract class WPForms_Field {
 					false
 				);
 
-				$raw_icon_sizes = wpforms()->get( 'icon_choices' )->get_icon_sizes();
+				$raw_icon_sizes = wpforms()->obj( 'icon_choices' )->get_icon_sizes();
 				$icon_sizes     = [];
 
 				foreach ( $raw_icon_sizes as $key => $data ) {
@@ -2305,6 +2385,20 @@ abstract class WPForms_Field {
 					);
 				}
 				break;
+
+			default:
+				/**
+				 * Filters the field preview option output.
+				 *
+				 * @since 1.9.1
+				 *
+				 * @param string $output Field option output.
+				 * @param array  $field  Field data and settings.
+				 * @param array  $args   Field preview arguments.
+				 * @param object $this   WPForms_Field object.
+				 */
+				$output = (string) apply_filters( "wpforms_field_option_{$option}", $output, $field, $args, $this );
+				break;
 		}
 
 		if ( ! $echo ) {
@@ -2717,7 +2811,7 @@ abstract class WPForms_Field {
 		// Grab field data.
 		$field_args        = ! empty( $_POST['defaults'] ) && is_array( $_POST['defaults'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['defaults'] ) ) : [];
 		$field_type        = sanitize_key( $_POST['type'] );
-		$field_id          = wpforms()->get( 'form' )->next_field_id( absint( $_POST['id'] ) );
+		$field_id          = wpforms()->obj( 'form' )->next_field_id( absint( $_POST['id'] ) );
 		$field             = [
 			'id'          => $field_id,
 			'type'        => $field_type,
@@ -2983,7 +3077,7 @@ abstract class WPForms_Field {
 
 		// Basic required check - If field is marked as required, check for entry data.
 		if ( ! empty( $form_data['fields'][ $field_id ]['required'] ) && empty( $field_submit ) && '0' !== (string) $field_submit ) {
-			wpforms()->get( 'process' )->errors[ $form_data['id'] ][ $field_id ] = wpforms_get_required_label();
+			wpforms()->obj( 'process' )->errors[ $form_data['id'] ][ $field_id ] = wpforms_get_required_label();
 		}
 	}
 
@@ -3008,7 +3102,7 @@ abstract class WPForms_Field {
 		// Sanitize but keep line breaks.
 		$value = wpforms_sanitize_textarea_field( $field_submit );
 
-		wpforms()->get( 'process' )->fields[ $field_id ] = [
+		wpforms()->obj( 'process' )->fields[ $field_id ] = [
 			'name'  => $name,
 			'value' => $value,
 			'id'    => wpforms_validate_field_id( $field_id ),
@@ -3198,7 +3292,7 @@ abstract class WPForms_Field {
 	 */
 	protected function enqueue_choicesjs_once( $forms ) {
 
-		if ( wpforms()->get( 'frontend' )->is_choicesjs_enqueued ) {
+		if ( wpforms()->obj( 'frontend' )->is_choicesjs_enqueued ) {
 			return;
 		}
 
@@ -3207,7 +3301,7 @@ abstract class WPForms_Field {
 			WPFORMS_PLUGIN_URL . 'assets/lib/choices.min.js',
 			[],
 			'10.2.0',
-			true
+			$this->load_script_in_footer()
 		);
 
 		$config = [
@@ -3243,7 +3337,7 @@ abstract class WPForms_Field {
 			$config
 		);
 
-		wpforms()->get( 'frontend' )->is_choicesjs_enqueued = true;
+		wpforms()->obj( 'frontend' )->is_choicesjs_enqueued = true;
 	}
 
 	/**
@@ -3619,5 +3713,45 @@ abstract class WPForms_Field {
 
 		// Otherwise return a minimum quantity.
 		return $min_quantity;
+	}
+
+	/**
+	 * Whether to print the script in the footer.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @return bool
+	 */
+	protected function load_script_in_footer(): bool {
+
+		return ! wpforms_is_frontend_js_header_force_load();
+	}
+
+	/**
+	 * Wrapper for esc_html() to prevent conversion of `<>` special chars to brackets.
+	 *
+	 * @since 1.9.1
+	 *
+	 * @param string $str String to escape.
+	 *
+	 * @return string
+	 */
+	protected function esc_attr_brackets( $str ): string {
+
+		return str_replace(
+			[
+				'&lt;',
+				'&gt;',
+				'&#060;',
+				'&#062;',
+			],
+			[
+				'&amp;lt;',
+				'&amp;gt;',
+				'&amp;#060;',
+				'&amp;#062;',
+			],
+			esc_html( $str )
+		);
 	}
 }

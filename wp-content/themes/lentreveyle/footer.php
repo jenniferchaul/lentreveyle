@@ -100,10 +100,11 @@
                     <div class="legale-notices">
                         <ul>
                             <li>
-                                <a href="https://www.jcdevandcode.fr/mentions-legales">Mentions légales - </a>
+                                
+                            <a href="<?= home_url('/mentions-legales') ?>">Mentions légales - </a>
                             </li>
                             <li>
-                                <a href="https://www.jcdevandcode.fr/politique-de-confidentialite">Politique de confidentialité</a>
+                            <a href="<?= home_url('/politique-de-confidentialite') ?>">Politique de confidentialité</a>
                             </li>
                         </ul>
                     </div>

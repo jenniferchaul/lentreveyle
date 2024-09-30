@@ -80,7 +80,7 @@
                     <img src="<?= get_theme_file_uri('assets/images/poisson.jpg') ?>" alt="menu de l'Entre Veyle">
                 </div>
                 <h3 class="box-title black">La carte</h3>
-                <p><a href="<?= home_url('/tous-les-plats') ?>">link</a></p>
+                <p><a href="<?= home_url('/tous-les-plats') ?>">Ouvrir le menu des plats</a></p>
             </div>
 
             <div class="box box2">
@@ -88,11 +88,35 @@
                     <img src="<?= get_theme_file_uri('assets/images/boissons.jpg') ?>" alt="menu boisson de l'Entre Veyle">
                 </div>
                 <h3 class="box-title white">Les boissons</h3>
-                <p><a href="<?= home_url('/les-boissons') ?>">link</a></p>
+                <?php
+                // Récupération des boissons
+                $drinks_args = array(
+                    'post_type' => 'drink', // Utilisation de ton CPT 'drink'
+                    'posts_per_page' => 1, // Supposons que tu n'as qu'un seul menu pour les boissons
+                );
+
+                $drinks = new WP_Query($drinks_args);
+
+                if ($drinks->have_posts()) :
+                    while ($drinks->have_posts()) : $drinks->the_post();
+                        // Récupération de l'URL du PDF
+                        $pdf_url = get_post_meta(get_the_ID(), '_pdf_url', true); 
+                    ?>
+                        <p>
+                            <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" rel="noopener noreferrer">Ouvrir le menu des boissons</a>
+                        </p>
+                    <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p>Aucun menu de boissons disponible.</p>';
+                endif;
+                ?>
             </div>
         </div>
     </div>
 </section>
+
 
 <section id="team" class="team">
     <div class="container-team">
@@ -133,7 +157,7 @@
             // Arguments pour récupérer les événements
             $args = array(
                 'post_type' => 'submenu', // Le CPT est 'submenu'
-                'posts_per_page' => 5, // Nombre maximum d'événements à afficher
+                'posts_per_page' => 2, // Nombre maximum d'événements à afficher
                 'meta_key' => 'date', // Tri en fonction du champ personnalisé 'date'
                 'orderby' => 'meta_value',
                 'order' => 'DESC' // Ordre décroissant
@@ -170,8 +194,14 @@
             endif;
             ?>
         </div>
+        <!-- Flèches de navigation ajoutées ici -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <!-- Pagination si nécessaire -->
+        <div class="swiper-pagination"></div>
     </div>
 </section>
+
 
 
 <section class="customers">
@@ -192,7 +222,7 @@
             <!-- gallery item -->
             <div class="items width2" style="position: absolute; left: 0px; top: 0px;">
                 <div class="item-img">
-                    <img src="<?= get_theme_file_uri('assets/images/grenouilles1.jpg') ?>" alt="image galerie 1">
+                    <img src="<?= get_theme_file_uri('assets/images/poissoncarotte.svg') ?>" alt="image galerie 1">
                 </div>
             </div>
 
@@ -220,7 +250,7 @@
             <!-- gallery item -->
             <div class="items width2" style="position: absolute; left: 877px; top: 0px;">
                 <div class="item-img">
-                    <img src="<?= get_theme_file_uri('assets/images/poisson_carotte1.jpg') ?>" alt="image galerie 5">
+                    <img src="<?= get_theme_file_uri('assets/images/grenouillesjeje.svg') ?>" alt="image galerie 5">
                 </div>
             </div>
         </div>

@@ -87,7 +87,7 @@ header {
 
     .navbar {
         position: fixed;
-        top: 0;
+        top: 2px;
         height: 7rem;
         width: 100%;
         z-index: 5;
@@ -636,7 +636,6 @@ header {
     width: 100%;
     background-image: url('../images/bg.jpg');
     background-size: cover;
-    //background-position: center;
     padding: 2rem 2rem;
     height: auto;
 
@@ -652,7 +651,6 @@ header {
     }
 
     .container {
-        //margin: 0 2rem;
         display: flex;
         flex-direction: column;
         padding: 1rem;
@@ -670,18 +668,19 @@ header {
 
         .grid-bx {
             z-index: 3;
-            //position: relative;
-            //display: grid;
-            //grid-template-columns: 1fr;
 
             .box {
                 position: relative;
                 text-align: center;
-                height: 16rem;
+                height: 16rem; // Taille fixe pour toutes les cards
                 margin-bottom: 2rem;
+                overflow: hidden; // S'assure que l'image ne dépasse pas la box
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 &:hover {
-                    opacity: 0.5;
+                    opacity: 0.8;
 
                     .black {
                         color: #000000;
@@ -702,14 +701,16 @@ header {
                     right: 0;
                     bottom: 0;
                     top: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 
                     img {
-                        max-width: 100%;
-                        height: 100%;
                         width: 100%;
-                        object-fit: cover;
-                        transition: all .6s;
-                        opacity: 0.6;
+                        height: 100%;
+                        object-fit: cover; // Ajuste l'image pour qu'elle remplisse entièrement la box
+                        transition: all 0.6s;
+                        opacity: 0.8;
                         border-radius: 11px;
                     }
                 }
@@ -721,23 +722,19 @@ header {
                     margin: auto;
                     left: 0;
                     right: 0;
-                    transition: all .6s;
+                    transition: all 0.6s;
                     text-transform: uppercase;
                     font-size: 38px;
                     font-family: $second-font;
                     color: #ffffff;
-
-                    //&.white {
-                    //    color: $second-color;
-                    //}
-
-                    //&.black {
-                    //    color: #333;
-                    //    font-weight: 400;
-                    //}
                 }
 
                 p {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
 
                     a {
                         text-decoration: none;
@@ -754,6 +751,7 @@ header {
         }
     }
 }
+
 
 .team {
     margin: 2rem 0.5rem 0;
@@ -815,6 +813,7 @@ header {
 
 .portfolio {
     filter: brightness(0.8);
+    background-color: $fourth-color;
 
         h2 {
             color: $first-color;
@@ -832,7 +831,7 @@ header {
 
         .container_mobile {
             div {
-                padding: 0.5rem 1rem ;
+                padding: 1.5rem 3rem ;
 
                 img {
                     filter: brightness(0.9) contrast(1.1) saturate(1.2);
@@ -910,28 +909,37 @@ header {
 
         .swiper-wrapper {
             display: flex;
-            //justify-content: center;
         }
 
         .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             flex: 0 0 auto;
-            width: 100%; // Chaque slide prend toute la largeur de l'écran sur mobile
-            padding: 1rem;
+            //width: 100%; /* Chaque slide prend toute la largeur de l'écran sur mobile */
+           // padding: 1rem;
+            box-sizing: border-box; // Assure que padding ne modifie pas la largeur
+            height: 20rem;
 
             .event-card {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                padding: 1.5rem 0.7rem;
+                width: 18rem; /* Largeur fixe pour toutes les cartes */
+                height: 18rem; /* Hauteur fixe pour toutes les cartes */
                 background: white;
                 border-radius: 8px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 text-decoration: none;
+                overflow: hidden; // Pour cacher tout débordement
+                margin: 0;
+                padding: 1rem;
 
                 img {
                     width: 100%; // Assure que l'image s'adapte à la largeur du conteneur
-                    height: auto; // Maintient le ratio de l'image
+                    height: 100%; // Assure que l'image s'adapte à la hauteur du conteneur
+                    object-fit: cover; // Ajuste l'image pour qu'elle remplisse entièrement la carte sans déformer le ratio
                     border-radius: 8px;
                 }
 
@@ -951,35 +959,51 @@ header {
         }
 
         .swiper-pagination {
-            margin-top: 20px;
+            margin: -9px 0;
         }
 
         .swiper-button-next,
         .swiper-button-prev {
-            color: $second-color;
+            color: $second-color; // Couleur actuelle, change-la si nécessaire
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
-            width: 44px;
-            height: 44px;
+            width: 30px; // Augmente la taille des boutons
+            height: 30px; // Augmente la taille des boutons
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.6); // Ajoute un fond semi-transparent
+            transition: background-color 0.3s; // Transition pour le changement de couleur
+        
+            // Change la couleur de fond au survol
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
         }
 
+        .swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 16px; // Ajuste cette valeur selon la taille souhaitée
+    width: auto; // Assure que la largeur s'adapte bien
+    height: auto; // Assure que la hauteur s'adapte bien
+}
+
+        
         .swiper-button-next {
-            right: 10px;
+            right: 30px; // Ajuste la position à droite, vers le centre
         }
-
+        
         .swiper-button-prev {
-            left: 10px;
+            left: 30px; // Ajuste la position à gauche, vers le centre
         }
+        
 
         .swiper-pagination-bullet {
-            background: #8d8585;
+            background: $second-color;
         }
 
         .swiper-pagination-bullet-active {
@@ -991,27 +1015,34 @@ header {
 
 @media (min-width: 640px) {
     .swiper-slide {
-        width: calc(50% - 10px); // Affichage de deux slides avec une marge sur les écrans moyens
+        width: calc(50% - 10px) !important; // Affichage de deux slides avec une marge sur les écrans moyens
     }
 }
 
 @media (min-width: 768px) {
     .swiper-slide {
-        width: calc(33.33% - 10px); // Trois slides visibles avec une marge sur les écrans larges
+        width: calc(45% - 10px) !important; // Trois slides visibles avec une marge sur les écrans larges
     }
 }
 
-@media (min-width: 1024px) {
+@media only screen and (min-width : 769px) and (max-width : 1024px) {
     .swiper-slide {
-        width: calc(25% - 10px); // Quatre slides visibles avec une marge sur les écrans encore plus larges
+        width: calc(36% - 10px) !important; // Quatre slides visibles avec une marge sur les écrans encore plus larges
     }
+}
+
+
+@media (min-width: 1025px) {
+        .swiper-slide {
+            width: calc(20% - 0px) !important; // Quatre slides visibles avec une marge sur les écrans encore plus larges
+        }
 }
 
 
 .form {
     display: flex;
     flex-direction: column; // Sur mobile, tout est en colonne
-    padding: 1rem;
+    padding: 2rem;
     background-color: #f7f7f7;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1296,7 +1327,7 @@ footer {
 /* ====================== [ Page menu ] ====================== */
 
 .plats-container {
-    padding-top: 30rem;
+    padding-top: 28rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1311,8 +1342,6 @@ footer {
     }
 
     .cards-bx {
-        display: flex;
-        padding: 3.5rem 1rem 2rem;
 
         .card {
             position: relative;
@@ -1399,134 +1428,134 @@ footer {
         }
     }
 
-    #categories-anchor {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 3rem;
-
-        h3 {
-            color: $first-color;
-            font-size: 30px;
-            text-decoration: underline;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-    }
+    //#categories-anchor {
+    //    display: flex;
+    //    flex-direction: column;
+    //    align-items: center;
+    //    padding: 3rem;
+//
+    //    h3 {
+    //        color: $first-color;
+    //        font-size: 30px;
+    //        text-decoration: underline;
+    //        text-transform: uppercase;
+    //        margin-bottom: 2rem;
+    //        text-align: center;
+    //    }
+//
+    //}
 }
 
-.category-links {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-
-    a {
-        font-family: $second-font;
-        font-weight: 700;
-        margin: 0 1rem;
-        font-size: 30px;
-        color: #000;
-        text-decoration: none;
-        position: relative;
-
-        &:hover {
-            color: $first-color;
-        }
-
-        &.active {
-            color: $first-color;
-            //&:after {
-            //    content: '';
-            //    position: absolute;
-            //    bottom: -2px;
-            //    left: 0;
-            //    width: 100%;
-            //    height: 2px;
-            //    background: $first-color;
-            //}
-        }
-    }
-}
+//.category-links {
+//    display: flex;
+//    justify-content: center;
+//    padding: 1rem;
+//
+//    a {
+//        font-family: $second-font;
+//        font-weight: 700;
+//        margin: 0 1rem;
+//        font-size: 30px;
+//        color: #000;
+//        text-decoration: none;
+//        position: relative;
+//
+//        &:hover {
+//            color: $first-color;
+//        }
+//
+//        &.active {
+//            color: $first-color;
+//            //&:after {
+//            //    content: '';
+//            //    position: absolute;
+//            //    bottom: -2px;
+//            //    left: 0;
+//            //    width: 100%;
+//            //    height: 2px;
+//            //    background: $first-color;
+//            //}
+//        }
+//    }
+//}
 
 /* Styles pour les plats */
-#plats-grid {
-    display: none; /* Masquer par défaut */
-    width: 40rem;
-    height: 42rem;
-    max-width: 1200px;
-    background-repeat: no-repeat;
-    background-size: 109% 115%;
-    background-position: center;
-    padding: 4rem 2.5rem;
-    margin: 3rem auto; /* Centrer horizontalement */
-    //min-height: 795px; /* Hauteur minimale pour garantir une taille constante */
-    background-image: none; /* Par défaut, pas de fond */
-
-    &.has-plats {
-        display: block; /* Afficher lorsque les plats sont chargés */
-        background-image: url("../images/1.png"); /* Afficher le fond lorsque les plats sont chargés */
-    }
-
-    .plat-card {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1rem;
-
-        .plat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            width: 100%;
-            padding: 0.5rem 0;
-
-            .plat-title {
-                font-family: $second-font;
-                font-size: 25px;
-                color: $third-color;
-                text-decoration: none;
-                transition: color 0.2s;
-                font-weight: 600;
-            }
-
-            .menu-line {
-                flex-grow: 1;
-                border-bottom: 1px dotted $first-color;
-                margin: 0 14px;
-                align-self: center;
-            }
-
-            .plat-price {
-                font-family: $second-font;
-                font-size: 25px;
-                font-weight: 700;
-                color: $third-color;
-                align-self: center;
-            }
-        }
-
-        .plat-description {
-            font-family: $main-font;
-            font-size: 0.9em;
-            color: $third-color;
-            margin-top: 0.3rem;
-        }
-
-        p {
-            font-family: $second-font;
-            font-size: 20px;
-            font-weight: 300;
-            color: $fourth-color;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .plat-card {
-            width: 100%;
-        }
-    }
-}
+//#plats-grid {
+//    display: none; /* Masquer par défaut */
+//    width: 40rem;
+//    height: 42rem;
+//    max-width: 1200px;
+//    background-repeat: no-repeat;
+//    background-size: 109% 115%;
+//    background-position: center;
+//    padding: 4rem 2.5rem;
+//    margin: 3rem auto; /* Centrer horizontalement */
+//    //min-height: 795px; /* Hauteur minimale pour garantir une taille constante */
+//    background-image: none; /* Par défaut, pas de fond */
+//
+//    &.has-plats {
+//        display: block; /* Afficher lorsque les plats sont chargés */
+//        background-image: url("../images/1.png"); /* Afficher le fond lorsque les plats sont chargés */
+//    }
+//
+//    .plat-card {
+//        display: flex;
+//        flex-direction: column;
+//        margin-bottom: 1rem;
+//
+//        .plat-header {
+//            display: flex;
+//            justify-content: space-between;
+//            align-items: baseline;
+//            width: 100%;
+//            padding: 0.5rem 0;
+//
+//            .plat-title {
+//                font-family: $second-font;
+//                font-size: 25px;
+//                color: $third-color;
+//                text-decoration: none;
+//                transition: color 0.2s;
+//                font-weight: 600;
+//            }
+//
+//            .menu-line {
+//                flex-grow: 1;
+//                border-bottom: 1px dotted $first-color;
+//                margin: 0 14px;
+//                align-self: center;
+//            }
+//
+//            .plat-price {
+//                font-family: $second-font;
+//                font-size: 25px;
+//                font-weight: 700;
+//                color: $third-color;
+//                align-self: center;
+//            }
+//        }
+//
+//        .plat-description {
+//            font-family: $main-font;
+//            font-size: 0.9em;
+//            color: $third-color;
+//            margin-top: 0.3rem;
+//        }
+//
+//        p {
+//            font-family: $second-font;
+//            font-size: 20px;
+//            font-weight: 300;
+//            color: $fourth-color;
+//        }
+//    }
+//
+//    @media (max-width: 768px) {
+//        .plat-card {
+//            width: 100%;
+//        }
+//    }
+//}
 
 .card-title {
     margin: 0;
@@ -1584,31 +1613,41 @@ footer {
 
 
 
-/* ====================== [ Page boissons ] ====================== */
+    /* ====================== [ Page confidentialité] ====================== */
 
-.boissons-container {
-    padding-top: 30rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    bottom: 19rem;
-    margin-bottom: -12rem;
-
-    h1 {
+    .politique-de-confidentialité,
+    .mentions-legales {
+        padding: 8rem 2rem 4rem;
         font-family: $main-font;
-        color: $first-color;
-        font-size: 28px;
+
+        h1 {
+            color: $first-color;
+            font-family: $main-font;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+            line-height: 27px;
+        }
+
+        h2 {
+            text-decoration: underline;
+            font-size: 18px;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+
+        span {
+            color: $first-color;
+            font-weight: 500;
+        }
     }
-}
-
-
 
 
 @media screen and (min-width: 768px) {
     .intro {
             flex-direction: row;
-            margin: 4rem 15rem;
+            //margin: 4rem 15rem;
     
             .intro-img-container {
     
@@ -1653,7 +1692,8 @@ footer {
                 .presentation {
                     display: flex;
                     flex-direction: row-reverse;
-                    margin: 2rem 18rem;
+                    //margin: 2rem 18rem;
+                    margin-bottom: 3rem;
                 }
     
                 .part-team {
@@ -1667,9 +1707,28 @@ footer {
             }
         }
 
+        .events-carousel {
+
+            .swiper-container {
+
+                .swiper-wrapper {
+                    justify-content: center;
+                }
+                .swiper-button-next,
+                .swiper-button-prev {
+                    display: none; // Masquer les boutons sur desktop
+                }
+
+                .swiper-pagination {
+                    display: none; // Masquer la pagination sur desktop
+                }
+
+            }
+        }
+
     .boxes {
         .container {
-            margin: 0 16rem;
+            //margin: 0 16rem;
             h2 {
                 margin-bottom: 2rem;
                 margin-top: 1rem;
@@ -1677,109 +1736,61 @@ footer {
         }
     }
 
-        .form {
-            //flex-direction: row; // En ligne pour desktop
-            justify-content: space-between;
-            padding: 5rem 6rem;
 
-            .form-contact {
-                display: flex;
-                justify-content: center;
-                margin-top: 2rem;
-
-            .wpcf7 {
-                width: 54rem;
-                display: flex;
-                margin-right: 3rem;
-            }
-    
-            form {
-                flex: 1;
-                max-width: 100%; // Limite la largeur du formulaire
-            }
-
-            .form-name,
-            .form-adress
-             {
-                display: flex;
-                justify-content:flex-start;
-
-                label {
-                    margin-right: 2rem;
-                }
-            }
-
-            textarea {
-                width: 47.8rem;
-            }
-    
-            .map-container {
-                flex: 1;
-                max-width: 50%;
-                padding-left: 2rem; // Espace entre le formulaire et la carte
-    
-                iframe {
-                    width: 100%;
-                    height: 100%; // Prend toute la hauteur du conteneur
-                }
-            }
-        }
-        }
-
-    .portfolio {
-        background-color: $fourth-color;
-        padding-bottom: 2rem;
-        .container_desk {
-            display: block;
-             max-width: 1200px;
-             width: 100%;
-            padding: 0 15px;
-            margin: 0 auto;
-
-            .gallery {
-                position: relative;
-                height: 560px;
-
-                .items {
-                        padding: 0 15px;
-                        margin-bottom: 30px;
-                        overflow: hidden;
-                        width: 50%;
-
-                    &.width2 {
-                        width: 25%;
-                    }
-        
-                    .item-img {
-                        overflow: hidden;
-    
-                        &:hover img {
-                            transform: scale(1.1);
-                                }
-        
-                        img {
-                            transition: all 0.4s;
-                            width: 100%;
-                            height: auto;
-                            vertical-align: middle;
-                            border-style: none;
-                        }
-                    }
-                }
-            }
-        }
-
-        .container_mobile {
-            display: none;
-        }
-    }
+    //.portfolio {
+    //    background-color: $fourth-color;
+    //    padding-bottom: 2rem;
+    //    .container_desk {
+    //        display: block;
+    //         max-width: 1200px;
+    //         width: 100%;
+    //        padding: 0 15px;
+    //        margin: 0 auto;
+//
+    //        .gallery {
+    //            position: relative;
+    //            height: 560px;
+//
+    //            .items {
+    //                    padding: 0 15px;
+    //                    margin-bottom: 30px;
+    //                    overflow: hidden;
+    //                    width: 50%;
+//
+    //                &.width2 {
+    //                    width: 25%;
+    //                }
+    //    
+    //                .item-img {
+    //                    overflow: hidden;
+    //
+    //                    &:hover img {
+    //                        transform: scale(1.1);
+    //                            }
+    //    
+    //                    img {
+    //                        transition: all 0.4s;
+    //                        width: 100%;
+    //                        height: auto;
+    //                        vertical-align: middle;
+    //                        border-style: none;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+//
+    //    .container_mobile {
+    //        display: none;
+    //    }
+    //}
 }
 
 @media only screen and (min-width : 600px) and (max-width : 1024px) {
     header {
 
         .img-toggle {
-            top: 2rem;
+            bottom: 3.5rem;
         }
     }
 }
@@ -1909,7 +1920,7 @@ footer {
 
 
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1025px) {
 
 
     header {
@@ -2107,17 +2118,123 @@ footer {
         }
     }
 
+    .intro {
+        margin: 4rem 15rem;
+    }
+
     .boxes {
         display: flex;
         justify-content: center;
+
+        .container {
+            margin: 0 16rem;
+        }
+    }
+
+    .team {
+        .presentation {
+            margin: 2rem 18rem;
+        }
     }
 
     .events-carousel {
         padding: 4rem 1.5rem;
+    }
 
-        .swiper-wrapper {
-            justify-content: center;
+    .portfolio {
+        padding-bottom: 2rem;
+        .container_desk {
+            display: block;
+             max-width: 1200px;
+             width: 100%;
+            padding: 0 15px;
+            margin: 0 auto;
+
+            .gallery {
+                position: relative;
+                height: 560px;
+
+                .items {
+                        padding: 0 15px;
+                        margin-bottom: 30px;
+                        overflow: hidden;
+                        width: 50%;
+
+                    &.width2 {
+                        width: 25%;
+                    }
+        
+                    .item-img {
+                        overflow: hidden;
+    
+                        &:hover img {
+                            transform: scale(1.1);
+                                }
+        
+                        img {
+                            transition: all 0.4s;
+                            width: 100%;
+                            height: auto;
+                            vertical-align: middle;
+                            border-style: none;
+                        }
+                    }
+                }
+            }
         }
+
+        .container_mobile {
+            display: none;
+        }
+    }
+
+    .form {
+        //flex-direction: row; // En ligne pour desktop
+        justify-content: space-between;
+        padding: 5rem 6rem;
+
+        .form-contact {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+
+        .wpcf7 {
+            width: 54rem;
+            display: flex;
+            margin-right: 3rem;
+        }
+
+        form {
+            flex: 1;
+            max-width: 100%; // Limite la largeur du formulaire
+        }
+
+        .form-name,
+        .form-adress
+         {
+            display: flex;
+            justify-content:flex-start;
+
+            label {
+                margin-right: 2rem;
+            }
+        }
+
+        textarea {
+            width: 47.8rem;
+        }
+
+        .map-container {
+            flex: 1;
+            max-width: 50%;
+            padding-left: 2rem; // Espace entre le formulaire et la carte
+
+            iframe {
+                width: 100%;
+                height: 100%; // Prend toute la hauteur du conteneur
+            }
+        }
+    }
     }
 
     footer {
@@ -2152,251 +2269,20 @@ footer {
         }
     }
 
-    /*Page boissons*/
+    /* ====================== [ Page menu ] ====================== */
 
-    /* ====================== [ Start tabs & list ] ====================== */
     .plats-container {
-        position: relative;
+        padding-top: 30rem;
 
-        .row {
+        .cards-bx {
             display: flex;
-            flex-wrap: wrap;
-            margin-right: -15px;
-            margin-left: -15px;
-
-            .offset-lg-1 {
-                margin-left: 8.33333%;
-
-                .tab-icons {
-                    display: flex;
-                    margin-bottom: 50px;
-
-                    li {
-                        width: 100%;
-                        color: #fff;
-                        margin-bottom: 20px;
-                        font-size: 24px;
-                        letter-spacing: 2px;
-
-                        a {
-                            position: relative;
-                            font-family: "Cormorant", serif;
-
-                            &:after {
-                                content: "";
-                                position: absolute;
-                                width: 0;
-                                height: 0;
-                                border-left: 10px solid transparent;
-                                border-right: 10px solid transparent;
-                                border-bottom: 15px solid #fff;
-                                bottom: -31px;
-                                left: calc(50% - 10px);
-                                opacity: 0;
-                                display: none;
-                            }
-
-                            span {
-                                font-size: 14px;
-                                color: #b7b095;
-                                margin-right: 5px;
-                            }
-                        }
-
-                        &.ui-tabs-active {
-                            color: #b7b095;
-
-                            a:after {
-                                opacity: 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            .col-12 {
-                flex: 0 0 100%;
-                max-width: 100%;
-
-                .row {
-                    display: flex;
-                    flex-wrap: wrap;
-                    margin-left: -15px;
-                    margin-right: -15px;
-
-                    .col-lg-6 {
-                        flex: 0 0 50%;
-                        max-width: 50%;
-
-                        .box-bord {
-                            padding: 80px 40px;
-                            position: relative;
-
-                            &:before {
-                                top: 5px;
-                                left: -5px;
-                                right: -5px;
-                                bottom: -5px;
-                                content: "";
-                                position: absolute;
-                                border: 1px solid $first-color;
-                                z-index: 3;
-                            }
-
-                            .list {
-                                &.mb-40 {
-                                    margin-bottom: 40px !important;
-                                }
-
-                                .box {
-                                    .combo {
-                                        display: flex;
-                                        padding-right: 30px;
-
-                                        .text {
-                                            padding-left: 30px;
-                                            width: 100%;
-
-                                            .flex {
-
-                                                h6,
-                                                .dot-line,
-                                                .price {
-                                                    display: table-cell;
-                                                }
-
-
-                                                h6 {
-                                                    font-size: 16px;
-                                                    font-weight: 500;
-                                                    white-space: nowrap;
-                                                    padding-right: 20px;
-                                                }
-
-                                                .price {
-                                                    padding-left: 20px;
-                                                    white-space: nowrap;
-
-                                                    h4 {
-                                                        font-size: 22px;
-                                                        color: $first-color;
-                                                    }
-
-                                                    span {
-                                                        font-size: 20px;
-                                                        color: $first-color;
-                                                    }
-                                                }
-
-                                                .dot-line {
-                                                    width: 100%;
-
-                                                    .dots {
-                                                        height: 4px;
-                                                        width: 100%;
-                                                        border-bottom: 1px dashed $first-color;
-                                                    }
-                                                }
-                                            }
-
-                                            p {
-                                                font-size: 13px;
-                                                margin-top: 10px;
-                                            }
-
-                                        }
-
-
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-
-                    &.menu-book {
-                        .tab-icons {
-                            display: flex;
-                            margin-bottom: 50px;
-                        }
-
-                        .box-bord {
-                            padding: 80px 40px;
-                            position: relative;
-
-                            &:after,
-                            &:before {
-                                content: "";
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                right: 0;
-                                bottom: 0;
-                                border: 1px solid $first-color;
-                                z-index: 3;
-                            }
-
-                            &:before {
-                                top: 5px;
-                                left: -5px;
-                                right: -5px;
-                                bottom: 5px;
-                            }
-
-                            .lins {
-                                position: absolute;
-                                top: 50%;
-                                right: 20px;
-                                transform: translateY(-100px);
-
-                                span {
-                                    width: 70px;
-                                    height: 35px;
-                                    border-top-left-radius: 260px;
-                                    border-top-right-radius: 260px;
-                                    border: 1px solid $first-color;
-                                    border-bottom: 0;
-                                    position: absolute;
-                                    top: 0;
-                                    left: 0;
-
-                                    &:nth-of-type(2) {
-                                        top: 50px;
-                                    }
-
-                                    &:nth-of-type(3) {
-                                        top: 100px;
-                                    }
-
-                                    &:after,
-                                    &:before {
-                                        content: "";
-                                        width: 10px;
-                                        height: 10px;
-                                        border-radius: 50%;
-                                        border: 1px solid $first-color;
-                                        position: absolute;
-                                        bottom: -5px;
-                                        right: -5px;
-                                    }
-
-                                    &:before {
-                                        right: auto;
-                                        left: -5px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            padding: 3.5rem 1rem 2rem;
         }
+    
 
-            /* ====================== [ End tabs & list ] ====================== */
+    }
 
-        }
+}
 
 
 @media screen and (min-width: 1378px) {

@@ -31,6 +31,15 @@ class WPForms_Field_Email extends WPForms_Field {
 	const RULES = 'rules';
 
 	/**
+	 * Restricted rules.
+	 *
+	 * @since 1.8.9
+	 *
+	 * @var array
+	 */
+	private $restricted_rules = [];
+
+	/**
 	 * Primary class constructor.
 	 *
 	 * @since 1.0.0
@@ -522,7 +531,7 @@ class WPForms_Field_Email extends WPForms_Field {
 					printf(
 						'<input type="email" %s %s>',
 						wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),
-						$primary['required']
+						esc_attr( $primary['required'] )
 					);
 					$this->field_display_sublabel( 'primary', 'after', $field );
 					$this->field_display_error( 'primary', $field );
@@ -534,7 +543,7 @@ class WPForms_Field_Email extends WPForms_Field {
 					printf(
 						'<input type="email" %s %s>',
 						wpforms_html_attributes( $secondary['id'], $secondary['class'], $secondary['data'], $secondary['attr'] ),
-						$secondary['required']
+						esc_attr( $secondary['required'] )
 					);
 					$this->field_display_sublabel( 'secondary', 'after', $field );
 					$this->field_display_error( 'secondary', $field );
@@ -563,7 +572,7 @@ class WPForms_Field_Email extends WPForms_Field {
 		}
 
 		if ( $value && ! wpforms_is_email( $value ) ) {
-			wpforms()->get( 'process' )->errors[ $form_data['id'] ][ $field_id ] = esc_html__( 'The provided email is not valid.', 'wpforms-lite' );
+			wpforms()->obj( 'process' )->errors[ $form_data['id'] ][ $field_id ] = esc_html__( 'The provided email is not valid.', 'wpforms-lite' );
 
 			return;
 		}
@@ -571,7 +580,7 @@ class WPForms_Field_Email extends WPForms_Field {
 		$name = ! empty( $form_data['fields'][ $field_id ] ['label'] ) ? $form_data['fields'][ $field_id ]['label'] : '';
 
 		// Set final field details.
-		wpforms()->get( 'process' )->fields[ $field_id ] = [
+		wpforms()->obj( 'process' )->fields[ $field_id ] = [
 			'name'  => sanitize_text_field( $name ),
 			'value' => sanitize_text_field( $this->decode_punycode( $value ) ),
 			'id'    => wpforms_validate_field_id( $field_id ),
@@ -604,7 +613,7 @@ class WPForms_Field_Email extends WPForms_Field {
 			return;
 		}
 
-		$process = wpforms()->get( 'process' );
+		$process = wpforms()->obj( 'process' );
 
 		if ( ! $process ) {
 			return;
@@ -651,11 +660,12 @@ class WPForms_Field_Email extends WPForms_Field {
 	 * Ajax handler to detect restricted email.
 	 *
 	 * @since 1.6.3
+	 * @since {VERSION Added repeater field compatibility.
 	 */
 	public function ajax_check_restricted_email() {
 
 		$form_id  = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
-		$field_id = filter_input( INPUT_POST, 'field_id', FILTER_SANITIZE_NUMBER_INT );
+		$field_id = absint( filter_input( INPUT_POST, 'field_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) );
 		$email    = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES );
 
 		// The valid email can contain such characters: !#$%&'*+/=?^_`{|}~-.
@@ -666,7 +676,7 @@ class WPForms_Field_Email extends WPForms_Field {
 			wp_send_json_error();
 		}
 
-		$form_data = wpforms()->get( 'form' )->get(
+		$form_data = wpforms()->obj( 'form' )->get(
 			$form_id,
 			[ 'content_only' => true ]
 		);
@@ -709,7 +719,7 @@ class WPForms_Field_Email extends WPForms_Field {
 	 *
 	 * @return void
 	 */
-	private function ajax_sanitize( $type ) {
+	private function ajax_sanitize( $type ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		// Run a security check.
 		check_ajax_referer( 'wpforms-builder', 'nonce' );
@@ -720,6 +730,8 @@ class WPForms_Field_Email extends WPForms_Field {
 		if ( ! $content ) {
 			wp_send_json_error();
 		}
+
+		$this->restricted_rules = [];
 
 		switch ( $type ) {
 			case self::RULES:
@@ -750,6 +762,10 @@ class WPForms_Field_Email extends WPForms_Field {
 
 			default:
 				break;
+		}
+
+		if ( ! empty( $this->restricted_rules ) ) {
+			$content['restricted'] = count( $this->restricted_rules );
 		}
 
 		wp_send_json_success( $content );
@@ -938,6 +954,8 @@ class WPForms_Field_Email extends WPForms_Field {
 
 			if ( ! $email_pattern ) {
 				unset( $patterns[ $key ] );
+				$this->restricted_rules[] = $pattern;
+
 				continue;
 			}
 
@@ -1053,12 +1071,22 @@ class WPForms_Field_Email extends WPForms_Field {
 	 */
 	public function add_builder_strings( $strings, $form ) {
 
-		$strings['allow_deny_lists_intersect'] = esc_html__(
-			'We’ve detected the same text in your allowlist and denylist. To prevent a conflict, we’ve removed the following text from the list you’re currently viewing:',
-			'wpforms-lite'
-		);
+		$email_strings = [
+			'allow_deny_lists_intersect' => esc_html__(
+				'We’ve detected the same text in your allowlist and denylist. To prevent a conflict, we’ve removed the following text from the list you’re currently viewing:',
+				'wpforms-lite'
+			),
+			'restricted_rules'           => esc_html__(
+				'At least one of the emails in your list contained an error and has been removed.',
+				'wpforms-lite'
+			),
+			'restricted_default_email'   => esc_html__(
+				'The provided email is not valid.',
+				'wpforms-lite'
+			),
+		];
 
-		return $strings;
+		return array_merge( $strings, $email_strings );
 	}
 
 	/**

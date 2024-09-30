@@ -165,6 +165,10 @@ const wpf = {
 	 * @param {string} container Container element.
 	 */
 	showMoreButtonForChoices( container ) {
+		if ( jQuery( container ).data( 'type' ) === 'select-one' ) {
+			return;
+		}
+
 		const first = jQuery( container ).find( '.choices__list--multiple .choices__item' ).first(),
 			last = jQuery( container ).find( '.choices__list--multiple .choices__item' ).last();
 
@@ -173,6 +177,39 @@ const wpf = {
 		if ( first.length > 0 && last.length > 0 && first.position().top !== last.position().top ) {
 			jQuery( container ).addClass( 'choices__show-more' );
 		}
+	},
+
+	/**
+	 * Initialize event handlers for choices.
+	 *
+	 * @since 1.9.0
+	 */
+	initializeChoicesEventHandlers() {
+		// Show more button for choices.
+		jQuery( document ).on( 'addItem removeItem', '.choices:not(.is-disabled)', function() {
+			wpf.showMoreButtonForChoices( this );
+		} );
+
+		// Remove focus from input when dropdown is hidden.
+		jQuery( document ).on( 'hideDropdown', '.choices:not(.is-disabled)', function() {
+			jQuery( this ).find( '.choices__inner input.choices__input' ).trigger( 'blur' );
+		} );
+	},
+
+	/**
+	 * Reinitialize show more choices.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param {Object} container Container element.
+	 */
+	reInitShowMoreChoices( container ) {
+		setTimeout( () => {
+			container.find( '.choices select' ).each( function() {
+				const $choiceInstance = jQuery( this ).data( 'choicesjs' );
+				wpf.showMoreButtonForChoices( $choiceInstance.containerOuter.element );
+			} );
+		}, 100 );
 	},
 
 	/**
@@ -197,10 +234,11 @@ const wpf = {
 	 * @param {Array|boolean|undefined} allowedFields           Allowed fields.
 	 * @param {boolean|undefined}       useCache                Use cache.
 	 * @param {boolean|undefined}       isAllowedRepeaterFields Is repeater fields allowed?
+	 * @param {Object|undefined}        fieldsToExclude         Fields to exclude.
 	 *
 	 * @return {Object} Fields.
 	 */
-	getFields( allowedFields, useCache, isAllowedRepeaterFields ) { // eslint-disable-line complexity
+	getFields( allowedFields = undefined, useCache = undefined, isAllowedRepeaterFields = undefined, fieldsToExclude = undefined ) { // eslint-disable-line complexity, max-lines-per-function
 		useCache = useCache || false;
 
 		let fields;
@@ -223,8 +261,8 @@ const wpf = {
 				'entry-preview',
 				'html',
 				'internal-information',
-				'layout',
 				'pagebreak',
+				'layout',
 			];
 
 			if ( ! fields ) {
@@ -243,7 +281,6 @@ const wpf = {
 								return;
 							}
 
-							// Update field label for a repeater child fields.
 							fields[ field ].label += ' (' + fields[ key ].label + ')';
 							fields[ field ].isRepeater = true;
 						} );
@@ -252,6 +289,9 @@ const wpf = {
 					delete fields[ key ];
 				}
 			}
+
+			// Add additional fields to the fields object.
+			wpf.addAdditionalFields( fields );
 
 			// Cache the all the fields now that they have been ordered and initially processed.
 			wpf.cachedFields = jQuery.extend( {}, fields );
@@ -264,6 +304,12 @@ const wpf = {
 				if ( fields[ key ]?.isRepeater ) {
 					delete fields[ key ];
 				}
+			}
+		}
+
+		if ( fieldsToExclude ) {
+			for ( const key in fieldsToExclude ) {
+				delete fields[ key ];
 			}
 		}
 
@@ -280,6 +326,54 @@ const wpf = {
 			return false;
 		}
 
+		const orderedFields = [];
+
+		for ( const fieldKey in wpf.orders.fields ) {
+			const fieldId = wpf.orders.fields[ fieldKey ];
+
+			if ( ! fields[ fieldId ] ) {
+				continue;
+			}
+
+			orderedFields.push( fields[ fieldId ] );
+		}
+
+		return Object.assign( {}, orderedFields );
+	},
+
+	/**
+	 * Add additional fields to the fields object.
+	 *
+	 * @since 1.8.9
+	 *
+	 * @param {Object} fields Fields object.
+	 *
+	 * @return {Object} Fields object with additional fields.
+	 */
+	addAdditionalFields( fields ) {
+		for ( const key in fields ) {
+			if ( [ 'name', 'date-time' ].includes( fields[ key ]?.type ) ) {
+				// Get the name format and split it into an array.
+				const nameFormat = fields[ key ].format;
+
+				// Add the name fields to the fields object
+				fields[ key ].additional = nameFormat.split( '-' );
+			}
+
+			if ( fields[ key ]?.type === 'address' ) {
+				// Get all keys with "_placeholder" in the name (address1_placeholder, address2_placeholder, etc.)
+				const addressFields = Object.keys( fields[ key ] ).filter( ( fieldKey ) => fieldKey.includes( '_placeholder' ) );
+
+				// Remove "_placeholder" from the keys
+				addressFields.forEach( ( fieldKey, index ) => {
+					addressFields[ index ] = fieldKey.replace( '_placeholder', '' );
+				} );
+
+				// Add the address fields to the fields object
+				fields[ key ].additional = addressFields;
+			}
+		}
+
 		return fields;
 	},
 
@@ -294,6 +388,10 @@ const wpf = {
 	 */
 	getField( id ) {
 		const field = wpf.formObject( '#wpforms-field-option-' + id );
+
+		if ( ! Object.keys( field ).length ) {
+			return {};
+		}
 
 		return field.fields[ Object.keys( field.fields )[ 0 ] ];
 	},
@@ -469,8 +567,8 @@ const wpf = {
 	 * @return {string} Sanitized amount.
 	 */
 	amountSanitize( amount ) { // eslint-disable-line complexity
-		// Convert to string and allow only numbers, dots, and commas.
-		amount = String( amount ).replace( /[^0-9.,]/g, '' );
+		// Convert to string, remove a currency symbol, and allow only numbers, dots, and commas.
+		amount = String( amount ).replace( wpforms_builder.currency_symbol, '' ).replace( /[^0-9.,]/g, '' );
 
 		if ( wpforms_builder.currency_decimal === ',' ) {
 			if ( wpforms_builder.currency_thousands === '.' && amount.indexOf( wpforms_builder.currency_thousands ) !== -1 ) {
@@ -753,15 +851,21 @@ const wpf = {
 		}
 
 		const isRTL = jQuery( 'body' ).hasClass( 'rtl' );
+		const position = isRTL ? 'left' : 'right';
 
-		jQuery( '.wpforms-help-tooltip' ).tooltipster( {
-			contentAsHTML: true,
-			position: isRTL ? 'left' : 'right',
-			maxWidth: 300,
-			multiple: true,
-			interactive: true,
-			debug: false,
-			IEmin: 11,
+		jQuery( '.wpforms-help-tooltip' ).each( function() {
+			const $this = jQuery( this );
+
+			$this.tooltipster( {
+				contentAsHTML: true,
+				position: $this.data( 'tooltip-position' ) || position,
+				maxWidth: 300,
+				multiple: true,
+				interactive: true,
+				debug: false,
+				IEmin: 11,
+				zIndex: 99999999,
+			} );
 		} );
 	},
 
@@ -879,6 +983,43 @@ const wpf = {
 		return string.replace( /[\u00A0-\u9999<>&]/gim, function( i ) {
 			return '&#' + i.charCodeAt( 0 ) + ';';
 		} );
+	},
+
+	/**
+	 * Decode allowed HTML entities.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param {string} string String to decode.
+	 *
+	 * @return {string} String with decoded allowed HTML entities.
+	 */
+	decodeAllowedHTMLEntities( string ) {
+		if ( typeof string !== 'string' ) {
+			string = string.toString();
+		}
+
+		/**
+		 * Filter: `wpforms.allowedHTMLEntities`.
+		 * Allow developers to add or remove allowed HTML entities.
+		 *
+		 * @since 1.9.0
+		 *
+		 * @param {Object} allowedEntities List of allowed HTML entities.
+		 */
+		const allowedEntities = wp.hooks.applyFilters(
+			'wpforms.allowedHTMLEntities',
+			{
+				'&amp;': '&',
+				'&nbsp;': ' ',
+			}
+		);
+
+		for ( const entity in allowedEntities ) {
+			string = string.replaceAll( entity, allowedEntities[ entity ] );
+		}
+
+		return string;
 	},
 
 	/**

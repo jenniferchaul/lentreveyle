@@ -52,7 +52,7 @@ abstract class FormBuilder implements FormBuilderInterface {
 		$this->core = $core;
 
 		if ( ! empty( $_GET['form_id'] ) ) { // phpcs:ignore
-			$this->form_data = wpforms()->get( 'form' )->get(
+			$this->form_data = wpforms()->obj( 'form' )->get(
 				\absint( $_GET['form_id'] ), // phpcs:ignore
 				[
 					'content_only' => true,
@@ -292,13 +292,13 @@ abstract class FormBuilder implements FormBuilderInterface {
 	public function process_ajax() {
 
 		// Run a security check.
-		\check_ajax_referer( 'wpforms-builder', 'nonce' );
+		check_ajax_referer( 'wpforms-builder', 'nonce' );
 
 		// Check for permissions.
-		if ( ! \wpforms_current_user_can( 'edit_forms' ) ) {
-			\wp_send_json_error(
+		if ( ! wpforms_current_user_can( 'edit_forms' ) ) {
+			wp_send_json_error(
 				[
-					'error' => \esc_html__( 'You do not have permission to perform this action.', 'wpforms-lite' ),
+					'error' => esc_html__( 'You do not have permission to perform this action.', 'wpforms-lite' ),
 				]
 			);
 		}
@@ -310,13 +310,13 @@ abstract class FormBuilder implements FormBuilderInterface {
 			empty( $_POST['id'] ) ||
 			empty( $_POST['task'] )
 		) {
-			\wp_send_json_error( $error );
+			wp_send_json_error( $error );
 		}
 
 		$form_id = (int) $_POST['id'];
 		$task    = sanitize_key( $_POST['task'] );
 
-		$revisions = wpforms()->get( 'revisions' );
+		$revisions = wpforms()->obj( 'revisions' );
 		$revision  = $revisions ? $revisions->get_revision() : null;
 
 		if ( $revision ) {
@@ -324,25 +324,29 @@ abstract class FormBuilder implements FormBuilderInterface {
 			$this->form_data = wpforms_decode( $revision->post_content );
 		} else {
 			// Setup form data based on the ID, that we got from AJAX request.
-			$form_handler    = wpforms()->get( 'form' );
+			$form_handler    = wpforms()->obj( 'form' );
 			$this->form_data = $form_handler ? $form_handler->get( $form_id, [ 'content_only' => true ] ) : [];
 		}
 
 		// Do not allow to proceed further, as form_id may be incorrect.
 		if ( empty( $this->form_data ) ) {
-			\wp_send_json_error( $error );
+			wp_send_json_error( $error );
 		}
 
-		$data = \apply_filters(
+		$data = apply_filters( // phpcs:ignore WPForms.Comments.PHPDocHooks.RequiredHookDocumentation, WPForms.PHP.ValidateHooks.InvalidHookName
 			'wpforms_providers_settings_builder_ajax_' . $task . '_' . $this->core->slug,
 			null
 		);
 
-		if ( null !== $data ) {
-			\wp_send_json_success( $data );
+		if ( ! empty( $data['error_msg'] ) ) {
+			wp_send_json_error( [ 'error_msg' => $data['error_msg'] ] );
 		}
 
-		\wp_send_json_error( $error );
+		if ( $data !== null ) {
+			wp_send_json_success( $data );
+		}
+
+		wp_send_json_error( $error );
 	}
 
 	/**
@@ -483,6 +487,9 @@ abstract class FormBuilder implements FormBuilderInterface {
 	protected function display_content_header() {
 
 		$is_configured = Status::init( $this->core->slug )->is_configured();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$form_id       = isset( $_GET['form_id'] ) ? sanitize_text_field( wp_unslash( $_GET['form_id'] ) ) : 0;
 		?>
 
 		<div class="wpforms-builder-provider-title wpforms-panel-content-section-title">
@@ -494,13 +501,13 @@ abstract class FormBuilder implements FormBuilderInterface {
 			</span>
 
 			<button class="wpforms-builder-provider-title-add js-wpforms-builder-provider-connection-add <?php echo $is_configured ? '' : 'hidden'; ?>"
-			        data-form_id="<?php echo \absint( $_GET['form_id'] ); ?>"
+			        data-form_id="<?php echo esc_attr( $form_id ); ?>"
 			        data-provider="<?php echo \esc_attr( $this->core->slug ); ?>">
 				<?php \esc_html_e( 'Add New Connection', 'wpforms-lite' ); ?>
 			</button>
 
 			<button class="wpforms-builder-provider-title-add js-wpforms-builder-provider-account-add <?php echo ! $is_configured ? '' : 'hidden'; ?>"
-			        data-form_id="<?php echo \absint( $_GET['form_id'] ); ?>"
+			        data-form_id="<?php echo esc_attr( $form_id ); ?>"
 			        data-provider="<?php echo \esc_attr( $this->core->slug ); ?>">
 				<?php \esc_html_e( 'Add New Account', 'wpforms-lite' ); ?>
 			</button>

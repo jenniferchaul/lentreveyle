@@ -7,7 +7,8 @@
 var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) { // eslint-disable-line no-var
 	let s,
 		$builder;
-	const elements = {};
+	const elements = {},
+		browser = {};
 
 	/**
 	 * Whether to show the close confirmation dialog or not.
@@ -143,6 +144,10 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 			// Cache builder element.
 			$builder = $( '#wpforms-builder' );
 
+			browser.isWindows = /Win/.test( navigator.userAgent );
+			browser.isLinux = /Linux/.test( navigator.userAgent );
+			browser.isMac = /Mac/.test( navigator.userAgent );
+
 			// Action buttons.
 			elements.$helpButton = $( '#wpforms-help' );
 			elements.$previewButton = $( '#wpforms-preview-btn' );
@@ -160,6 +165,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 			elements.$focusOutTarget = null;
 
 			elements.$nextFieldId = $( '#wpforms-field-id' );
+			elements.$addFieldsTab = $( '#add-fields a' );
 			elements.$fieldOptions = $( '#wpforms-field-options' );
 			elements.$fieldsPreviewWrap = $( '#wpforms-panel-fields .wpforms-panel-content-wrap' );
 			elements.$sortableFieldsWrap = $( '#wpforms-panel-fields .wpforms-field-wrap' );
@@ -278,6 +284,8 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 			app.initSomeFieldOptions();
 
 			app.dismissNotice();
+
+			wpf.initializeChoicesEventHandlers();
 		},
 
 		checkEmptyDynamicChoices() {
@@ -320,10 +328,9 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 		 * @since 1.6.8
 		 */
 		loadMsWinCSS() {
-			const ua = navigator.userAgent;
 
 			// Detect OS & browsers.
-			if ( ua.indexOf( 'Macintosh' ) !== -1 ) {
+			if ( browser.isMac ) {
 				return;
 			}
 
@@ -439,6 +446,14 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 								$( this.input.element ).addClass( 'choices__input--hidden' );
 							}
 						}
+
+						// Decode allowed HTML entities for choices.
+						$element.find( '.choices__item--selectable' ).each( function() {
+							const $choice = $( this );
+							const text = wpf.decodeAllowedHTMLEntities( $choice.text() );
+
+							$choice.text( text );
+						} );
 					},
 				},
 			},
@@ -711,7 +726,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 						return false;
 					}
 
-					const placeholder = instance.config.choices[ 0 ].label,
+					const placeholder = wpf.decodeAllowedHTMLEntities( instance.config.choices[ 0 ].label ),
 						isMultiple = $( instance.passedElement.element ).prop( 'multiple' ),
 						selected = ! ( isMultiple || hasDefaults );
 
@@ -2141,6 +2156,8 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 				let $current = 'allow';
 
+				$currentField.next( '.wpforms-alert' ).remove();
+
 				if ( $currentField.val() === '' ) {
 					return;
 				}
@@ -2186,19 +2203,20 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 									},
 								} );
 							}
+
+							const restricted = res.data.restricted || 0;
+							if ( restricted ) {
+								$currentField.after( '<div class="wpforms-alert-warning wpforms-alert"><p>' + wpforms_builder.restricted_rules + '</p></div>' );
+							}
 						}
 					}
 				);
 			} );
 
-			// On any click check if we had focusout event.
-			$builder.on( 'click', function() {
-				app.focusOutEvent();
-			} );
-
 			// Save focusout target.
 			$builder.on( 'focusout', elements.defaultEmailSelector, function() {
 				elements.$focusOutTarget = $( this );
+				app.focusOutEvent();
 			} );
 
 			// Real-time updates for "Size" field option
@@ -2985,6 +3003,8 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 			if ( elements.$defaultEmail.is( elements.$focusOutTarget ) ) {
 				const $field = elements.$focusOutTarget;
 
+				$field.next( '.wpforms-alert' ).remove();
+
 				if ( $field.val() === '' ) {
 					return;
 				}
@@ -3000,6 +3020,10 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 						if ( res.success ) {
 							$field.val( res.data );
 							$field.trigger( 'input' );
+
+							if ( ! res.data ) {
+								$field.after( '<div class="wpforms-alert-warning wpforms-alert"><p>' + wpforms_builder.restricted_default_email + '</p></div>' );
+							}
 						}
 					}
 				);
@@ -4853,6 +4877,17 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 		},
 
 		/**
+		 * Trigger $builder event.
+		 *
+		 * @since 1.9.1
+		 *
+		 * @param {string} event Event name.
+		 */
+		triggerBuilderEvent( event ) {
+			$builder.trigger( event );
+		},
+
+		/**
 		 * Toggle fields tabs (Add Fields, Field Options.
 		 *
 		 * @since 1.0.0
@@ -4873,7 +4908,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 			$( '.wpforms-field, .wpforms-title-desc' ).removeClass( 'active' );
 
 			if ( id === 'add-fields' ) {
-				$( '#add-fields a' ).addClass( 'active' );
+				elements.$addFieldsTab.addClass( 'active' );
 				$( '.wpforms-field-options' ).hide();
 				$( '.wpforms-add-fields' ).show();
 			} else {
@@ -5041,7 +5076,8 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				id = $thisOption.data( 'field-id' );
 			const $choices = $( '#wpforms-field-option-row-' + id + '-choices' ),
 				$images = $( '#wpforms-field-option-' + id + '-choices_images' ),
-				$icons = $( '#wpforms-field-option-' + id + '-choices_icons' );
+				$icons = $( '#wpforms-field-option-' + id + '-choices_icons' ),
+				$basicOptions = $( `#wpforms-field-option-basic-${ id }` );
 
 			// Hide image and icon choices if "dynamic choices" is not off.
 			app.fieldDynamicChoiceToggleImageChoices();
@@ -5067,6 +5103,9 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 				// Hide `Bulk Add` toggle.
 				$choices.find( '.toggle-bulk-add-display' ).addClass( 'wpforms-hidden' );
+
+				// Hide AI Choices button.
+				$basicOptions.find( '.wpforms-ai-choices-button' ).addClass( 'wpforms-hidden' );
 
 				const data = {
 					type: value,
@@ -5113,6 +5152,9 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 			// Show `Bulk Add` toggle.
 			$choices.find( '.toggle-bulk-add-display' ).removeClass( 'wpforms-hidden' );
+
+			// Show AI Choices button.
+			$basicOptions.find( '.wpforms-ai-choices-button' ).removeClass( 'wpforms-hidden' );
 
 			$( '#wpforms-field-' + id ).find( '.wpforms-alert' ).remove();
 
@@ -5684,15 +5726,33 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				$parent = $selector.parent(),
 				$id = $parent.data( 'field-id' ),
 				$label = $parent.find( 'label' ),
-				$input = $parent.find( 'input[type=text]' );
+				$input = $parent.find( 'input[type=text]' ),
+				layoutClassList = [
+					'wpforms-one-half',
+					'wpforms-first',
+					'wpforms-one-third',
+					'wpforms-one-fourth',
+					'wpforms-two-thirds',
+					'wpforms-two-fourths'
+				];
 
-			let classes = $this.data( 'classes' );
+			let classes = $this.data( 'classes' ),
+				inputVal = $input.val();
 
-			if ( $input.val() ) {
-				classes = ' ' + classes;
+			if ( inputVal ) {
+				// Remove existing wpforms layout classes before adding new.
+				layoutClassList.forEach( ( cls ) => {
+					inputVal = inputVal.replace( new RegExp( '\\b' + cls + '\\b', 'gi' ), '' );
+				} );
+
+				// Remove any extra spaces.
+				inputVal = inputVal.replace( /\s\s+/g, ' ' ).trim();
+
+				// Add new layout classes.
+				classes += ' ' + inputVal;
 			}
 
-			$input.insertAtCaret( classes );
+			$input.val( classes );
 
 			// Remove the list, all done!
 			$selector.slideUp( 400, function() {
@@ -6833,7 +6893,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 			const data = {
 				action: 'wpforms_save_form',
-				data: JSON.stringify( $( '#wpforms-builder-form' ).serializeArray() ),
+				data: JSON.stringify( app.serializeAllData( $( '#wpforms-builder-form' ) ) ),
 				id: s.formID,
 				nonce: wpforms_builder.nonce,
 			};
@@ -6866,6 +6926,31 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				$spinner.addClass( 'wpforms-hidden' );
 				$icon.removeClass( 'wpforms-hidden' );
 			} );
+		},
+
+		/**
+		 * Serialize all form data including checkboxes that are not checked.
+		 *
+		 * @since 1.9.0
+		 *
+		 * @param {Object} $form Form jQuery object.
+		 *
+		 * @return {Array} Form data.
+		 */
+		serializeAllData( $form ) {
+			const formData = $form.serializeArray();
+
+			$form.find( '.wpforms-field-option-layout .wpforms-field-option-row-label_hide input[type=checkbox]' ).each( function() {
+				const $checkbox = $( this );
+				const name = $checkbox.attr( 'name' );
+				const value = $checkbox.is( ':checked' ) ? '1' : '';
+
+				if ( ! value ) {
+					formData.push( { name, value } );
+				}
+			} );
+
+			return formData;
 		},
 
 		/**
@@ -7263,6 +7348,11 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 					} );
 				}
 			} );
+
+			// Re-init Show More button for multiselect instances when it's visible.
+			$builder.on( 'wpformsPanelSectionSwitch wpformsPanelSwitched', function() {
+				wpf.reInitShowMoreChoices( $( '#wpforms-panel-providers, #wpforms-panel-settings' ) );
+			} );
 		},
 
 		/**
@@ -7556,14 +7646,8 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 			smartTagListElements += '<li class="heading">' + wpforms_builder.fields_available + '</li>';
 
-			for ( const fieldKey in wpf.orders.fields ) {
-				const fieldId = wpf.orders.fields[ fieldKey ];
-
-				if ( ! fields[ fieldId ] ) {
-					continue;
-				}
-
-				smartTagListElements += app.getSmartTagsListFieldsElement( fields[ fieldId ] );
+			for ( const fieldKey in fields ) {
+				smartTagListElements += app.getSmartTagsListFieldsElement( fields[ fieldKey ] );
 			}
 
 			return smartTagListElements;
@@ -7600,7 +7684,20 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				? wpf.encodeHTMLEntities( wpf.sanitizeHTML( field.label ) )
 				: wpforms_builder.field + ' #' + field.id;
 
-			return '<li><a href="#" data-type="field" data-meta=\'' + field.id + '\'>' + label + '</a></li>';
+			let html = `<li><a href="#" data-type="field" data-meta="${ field.id }">${ label }</a></li>`;
+
+			const additionalTags = field.additional || [];
+
+			// Add additional tags for `name`, `date/time` and `address` fields.
+			if ( additionalTags.length > 1 ) {
+				additionalTags.forEach( ( additionalTag ) => {
+					// Capitalize the first letter and add space before numbers.
+					const additionalTagLabel = additionalTag.charAt( 0 ).toUpperCase() + additionalTag.slice( 1 ).replace( /(\D)(\d)/g, '$1 $2' );
+					html += `<li><a href="#" data-type="field" data-meta="${ field.id }" data-additional='${ additionalTag }'>${ label } – ${ additionalTagLabel }</a></li>`;
+				} );
+			}
+
+			return html;
 		},
 
 		/**
@@ -7651,8 +7748,9 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				$toggle = $wrapper.find( '.toggle-smart-tag-display' ),
 				$input = $wrapper.find( 'input[type=text], textarea' ),
 				meta = $this.data( 'meta' ),
+				additional = $this.data( 'additional' ) ? '|' + $this.data( 'additional' ) : '',
 				type = $this.data( 'type' );
-			let smartTag = type === 'field' ? '{field_id="' + meta + '"}' : '{' + meta + '}',
+			let smartTag = type === 'field' ? '{field_id="' + meta + additional + '"}' : '{' + meta + '}',
 				editor;
 
 			if ( typeof tinyMCE !== 'undefined' ) {
@@ -7739,6 +7837,14 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 		 * @param {Object} fields Fields.
 		 */
 		fieldMapSelect( e, fields ) { // eslint-disable-line max-lines-per-function
+			const event = WPFormsUtils.triggerEvent( $builder, 'wpformsBeforeFieldMapSelectUpdate' );
+
+			// Allow callbacks on `wpformsBeforeFieldMapSelectUpdate` to cancel adding field
+			// by triggering `event.preventDefault()`.
+			if ( event.isDefaultPrevented() ) {
+				return;
+			}
+
 			$( '.wpforms-field-map-select' ).each( function( index, el ) { // eslint-disable-line complexity, no-unused-vars
 				const $this = $( this );
 				let allowedFields = $this.data( 'field-map-allowed' ),
@@ -7763,12 +7869,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 
 				// Loop through the current fields, if we have fields for the form.
 				if ( fields && ! $.isEmptyObject( fields ) ) {
-					for ( const key in wpf.orders.fields ) {
-						if ( ! Object.prototype.hasOwnProperty.call( wpf.orders.fields, key ) ) {
-							continue;
-						}
-
-						const fieldID = wpf.orders.fields[ key ];
+					for ( const fieldID in fields ) {
 						let label = '';
 
 						if ( ! fields[ fieldID ] ) {
@@ -8490,12 +8591,20 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 		 * Ctrl+Q - Exit.
 		 * Ctrl+/ - Keyboard Shortcuts modal.
 		 * Ctrl+F - Focus search fields input.
-		 * Ctrl+T - Toggle sidebar.
+		 * Ctrl+T - Toggle sidebar (Alt+S on Windows and Linux).
 		 *
 		 * @since 1.2.4
 		 */
 		builderHotkeys() {
 			$( document ).on( 'keydown', function( e ) { // eslint-disable-line complexity
+
+				// Toggle sidebar on Alt+S (on Windows and Linux).
+				if ( ( browser.isLinux || browser.isWindows ) && e.altKey && e.keyCode === 83 ) {
+					$( elements.$sidebarToggle, $builder ).trigger( 'click' );
+
+					return;
+				}
+
 				if ( ! e.ctrlKey ) {
 					return;
 				}
@@ -8534,6 +8643,7 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 						break;
 
 					case 70: // Focus search fields input on Ctrl+F.
+						elements.$addFieldsTab.trigger( 'click' );
 						elements.$fieldsSidebar.scrollTop( 0 );
 						elements.$searchInput.focus();
 						break;
@@ -8575,6 +8685,10 @@ var WPFormsBuilder = window.WPFormsBuilder || ( function( document, window, $ ) 
 				},
 				onOpenBefore() {
 					this.$body.addClass( 'wpforms-builder-keyboard-shortcuts' );
+					// Dynamically change the shortcut key documentation on Windows/Linux.
+					if ( browser.isLinux || browser.isWindows ) {
+						this.$body.find( '.shortcut-key.shortcut-key-ctrl-t' ).html( '<i>alt</i><i>s</i>' );
+					}
 				},
 			} );
 		},
