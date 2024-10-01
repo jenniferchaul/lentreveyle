@@ -53,12 +53,12 @@ body, html {
     &::after {
         position: absolute;
         font-family: "Font Awesome 5 Free";
-        content: "";
+        content: ""; /* Flèche vers le haut */
         text-align: center;
         line-height: 44px;
         font-size: 13px;
         font-weight: 900;
-        color: $first-color;
+        color: $first-color; /* Utilise $first-color si tu as une variable Sass */
         left: 0;
         top: 0;
         height: 44px;
@@ -76,18 +76,19 @@ body, html {
     svg.progress-circle path {
         stroke: #b7b095;
         stroke-width: 4;
+        stroke-dasharray: 307.919; /* La longueur totale du chemin */
+        stroke-dashoffset: 307.919; /* Cache le chemin au départ */
+        transition: stroke-dashoffset 400ms linear;
         box-sizing: border-box;
-        transition: all 400ms linear;
     }
 }
-
 
 
 header {
 
     .navbar {
         position: fixed;
-        top: 2px;
+        top: 0px;
         height: 7rem;
         width: 100%;
         z-index: 5;
@@ -107,7 +108,6 @@ header {
         }
 
     }
-
 
 
     .navbar-content {
@@ -246,7 +246,6 @@ header {
 
     .menu-icon {
         display: block;
-        //right: 3rem;
     }
 
     .close-icon {
@@ -334,12 +333,11 @@ header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            //padding: 0 3rem;
 
             a {
                 background: transparent;
                 padding: 1rem 2rem;
-                width: 220px; // Fixe la largeur des boutons
+                width: 220px; 
                 position: relative;
                 color: $second-color;
                 -webkit-transition: all 0.4s;
@@ -392,8 +390,6 @@ header {
 
         .shape-bottom {
             position: absolute;
-            //width: 136%;
-            //right: -4rem;
             max-width: 100%;
             overflow: hidden;
 
@@ -401,7 +397,6 @@ header {
                 display: block;
                 width: calc(100% + 1.3px);
                 position: relative;
-                //left: 50%;
                 transform: rotate(180deg);
                 max-width: 115%;
 
@@ -462,7 +457,7 @@ header {
             a {
                 background: transparent;
                 padding: 1rem 2rem;
-                width: 220px; // Fixe la largeur des boutons
+                width: 220px; 
                 position: relative;
                 color: $second-color;
                 -webkit-transition: all 0.4s;
@@ -516,8 +511,6 @@ header {
 
     .intro-img-container {
         display: flex;
-        //position: relative;
-        //left: 5rem;
 
         &.flex {
             flex: 1;
@@ -542,25 +535,18 @@ header {
                     width: 86%;
                 }
 
-                //
                 &.img2 {
                     width: 120%;
-                    //position: relative;
-                    //bottom: 1rem;
                     border-right: 0;
                 }
 
-                //
                 &.img3 {
                     position: relative;
-                    //right: 5rem;
-                    //width: 16rem;
                     top: 3rem;
                     width: 145rem;
                     right: 2rem;
                 }
             }
-
 
         }
 
@@ -588,9 +574,6 @@ header {
     }
 
     .menu-container-text {
-        //display: flex;
-        //flex-direction: column;
-        //align-items: center;
         position: relative;
         z-index: 2;
 
@@ -672,9 +655,9 @@ header {
             .box {
                 position: relative;
                 text-align: center;
-                height: 16rem; // Taille fixe pour toutes les cards
+                height: 16rem; 
                 margin-bottom: 2rem;
-                overflow: hidden; // S'assure que l'image ne dépasse pas la box
+                overflow: hidden; 
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -708,7 +691,7 @@ header {
                     img {
                         width: 100%;
                         height: 100%;
-                        object-fit: cover; // Ajuste l'image pour qu'elle remplisse entièrement la box
+                        object-fit: cover; 
                         transition: all 0.6s;
                         opacity: 0.8;
                         border-radius: 11px;
@@ -812,35 +795,34 @@ header {
 }
 
 .portfolio {
-    filter: brightness(0.8);
     background-color: $fourth-color;
 
-        h2 {
-            color: $first-color;
-            font-family: $main-font;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            padding: 2rem 0;
-            text-align: center;
-        }
+    h2 {
+        color: $first-color;
+        font-family: $main-font;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        padding: 2rem 0;
+        text-align: center;
+    }
 
-        .container_desk {
-            display: none;
-        }
+    .container_desk {
+        display: none;
+    }
 
-        .container_mobile {
-            div {
-                padding: 1.5rem 3rem ;
+    .container_mobile {
+        div {
+            padding: 1.5rem 3rem;
 
-                img {
-                    filter: brightness(0.9) contrast(1.1) saturate(1.2);
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;;
-                }
+            img {
+                filter: brightness(0.9) contrast(1.1) saturate(1.2);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                ;
             }
         }
-    
+    }
 }
 
 .customers {
@@ -904,8 +886,8 @@ header {
 
     .swiper-container {
         width: 100%;
-        overflow: hidden; // Assure que le contenu débordant est caché
-        position: relative; // Nécessaire pour positionner les flèches
+        overflow: hidden; 
+        position: relative; 
 
         .swiper-wrapper {
             display: flex;
@@ -916,9 +898,7 @@ header {
             justify-content: center;
             align-items: center;
             flex: 0 0 auto;
-            //width: 100%; /* Chaque slide prend toute la largeur de l'écran sur mobile */
-           // padding: 1rem;
-            box-sizing: border-box; // Assure que padding ne modifie pas la largeur
+            box-sizing: border-box; 
             height: 20rem;
 
             .event-card {
@@ -926,20 +906,20 @@ header {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                width: 18rem; /* Largeur fixe pour toutes les cartes */
-                height: 18rem; /* Hauteur fixe pour toutes les cartes */
+                width: 18rem; 
+                height: 18rem; 
                 background: white;
                 border-radius: 8px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 text-decoration: none;
-                overflow: hidden; // Pour cacher tout débordement
+                overflow: hidden; 
                 margin: 0;
                 padding: 1rem;
 
                 img {
-                    width: 100%; // Assure que l'image s'adapte à la largeur du conteneur
-                    height: 100%; // Assure que l'image s'adapte à la hauteur du conteneur
-                    object-fit: cover; // Ajuste l'image pour qu'elle remplisse entièrement la carte sans déformer le ratio
+                    width: 100%; 
+                    height: 100%; 
+                    object-fit: cover; 
                     border-radius: 8px;
                 }
 
@@ -964,20 +944,20 @@ header {
 
         .swiper-button-next,
         .swiper-button-prev {
-            color: $second-color; // Couleur actuelle, change-la si nécessaire
+            color: $second-color; 
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
-            width: 30px; // Augmente la taille des boutons
-            height: 30px; // Augmente la taille des boutons
+            width: 30px; 
+            height: 30px; 
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.6); // Ajoute un fond semi-transparent
-            transition: background-color 0.3s; // Transition pour le changement de couleur
+            background-color: rgba(0, 0, 0, 0.6); 
+            transition: background-color 0.3s; 
         
             // Change la couleur de fond au survol
             &:hover {
@@ -987,18 +967,18 @@ header {
 
         .swiper-button-next::after,
 .swiper-button-prev::after {
-    font-size: 16px; // Ajuste cette valeur selon la taille souhaitée
-    width: auto; // Assure que la largeur s'adapte bien
-    height: auto; // Assure que la hauteur s'adapte bien
+    font-size: 16px; 
+    width: auto; 
+    height: auto; 
 }
 
         
         .swiper-button-next {
-            right: 30px; // Ajuste la position à droite, vers le centre
+            right: 30px; 
         }
         
         .swiper-button-prev {
-            left: 30px; // Ajuste la position à gauche, vers le centre
+            left: 30px; 
         }
         
 
@@ -1007,8 +987,8 @@ header {
         }
 
         .swiper-pagination-bullet-active {
-            background: #b7b095; // Couleur des boutons de pagination actifs
-            opacity: 1; // Opacité des boutons de pagination actifs
+            background: #b7b095; 
+            opacity: 1; 
         }
     }
 }
@@ -1041,7 +1021,7 @@ header {
 
 .form {
     display: flex;
-    flex-direction: column; // Sur mobile, tout est en colonne
+    flex-direction: column; 
     padding: 2rem;
     background-color: #f7f7f7;
     border-radius: 10px;
@@ -1125,11 +1105,11 @@ header {
 
     // Carte Google Maps pour mobile
     .map-container {
-        margin-top: 2rem; // Espace entre le formulaire et la carte sur mobile
+        margin-top: 2rem; 
 
         iframe {
             width: 100%;
-            height: 300px; // Hauteur ajustée pour mobile
+            height: 300px; 
             border: 0;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -1147,8 +1127,12 @@ footer {
 
     .container {
         max-width: 100%;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         margin: auto;
+
+        @media screen and (max-width: 340px) {
+            padding: 0px;
+        }
 
         h3 {
             color: $first-color;
@@ -1223,6 +1207,10 @@ footer {
                 display: table-cell;
                 white-space: nowrap;
                 padding-right: 0.5rem;
+
+                @media screen and (max-width: 340px) {
+                    padding-right: 0px;
+                }
             }
 
             .dots {
@@ -1242,7 +1230,7 @@ footer {
             }
 
             p {
-                color: #777;
+                color: $third-color;
                 font-size: 14px;
                 line-height: 20px;
             }
@@ -1253,15 +1241,15 @@ footer {
             .wp-core-ui div.wpforms-container-full input[type=submit],
             .wp-core-ui div.wpforms-container-full button[type=submit],
             .wp-core-ui div.wpforms-container-full .wpforms-page-button {
-                background-color: #b7b095 !important; // Couleur de fond initiale avec !important
-                color: var(--wpforms-button-text-color) !important; // Couleur de texte avec !important
+                background-color: $first-color !important; 
+                color: var(--wpforms-button-text-color) !important; 
                 align-items: center;
                 font-size: 15px;
 
                 &:hover,
                 &:active {
-                    background-color: #777 !important; // Couleur de survol avec !important
-                    color: var(--wpforms-button-text-color) !important; // Couleur de texte au survol avec !important
+                    background-color: $third-color !important; 
+                    color: var(--wpforms-button-text-color) !important; 
                 }
             }
 
@@ -1270,7 +1258,7 @@ footer {
                 border: 1px solid rgba(255, 255, 255, 0.2);
 
                 &::placeholder {
-                    color: #ffffff !important; // Couleur du placeholder
+                    color: $second-color !important; 
                 }
             }
 
@@ -1351,13 +1339,13 @@ footer {
 
             .img-card {
                 margin: 2rem;
-                overflow: hidden; /* Ensure the zoomed image does not overflow */
+                overflow: hidden; 
                 position: relative;
 
                 img {
                     width: 25rem;
-                    height: 20rem;
-                    transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+                    height: auto;
+                    transition: transform 0.3s ease; 
                     display: block;
                 }
             }
@@ -1371,18 +1359,18 @@ footer {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+                background: rgba(0, 0, 0, 0.5); 
 
                 h3 {
                     font-family: $second-font;
                     font-weight: 700;
                     margin: 0;
-                    font-size: 1.5em; /* Taille de la police */
-                    color: #fff; /* Couleur du texte */
+                    font-size: 1.5em; 
+                    color: #fff; 
                     text-align: center;
                     padding: 10px;
                     position: relative;
-                    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+                    transition: transform 0.3s ease, color 0.3s ease; 
 
                     &:hover {
                         color: $first-color;
@@ -1428,146 +1416,19 @@ footer {
         }
     }
 
-    //#categories-anchor {
-    //    display: flex;
-    //    flex-direction: column;
-    //    align-items: center;
-    //    padding: 3rem;
-//
-    //    h3 {
-    //        color: $first-color;
-    //        font-size: 30px;
-    //        text-decoration: underline;
-    //        text-transform: uppercase;
-    //        margin-bottom: 2rem;
-    //        text-align: center;
-    //    }
-//
-    //}
 }
-
-//.category-links {
-//    display: flex;
-//    justify-content: center;
-//    padding: 1rem;
-//
-//    a {
-//        font-family: $second-font;
-//        font-weight: 700;
-//        margin: 0 1rem;
-//        font-size: 30px;
-//        color: #000;
-//        text-decoration: none;
-//        position: relative;
-//
-//        &:hover {
-//            color: $first-color;
-//        }
-//
-//        &.active {
-//            color: $first-color;
-//            //&:after {
-//            //    content: '';
-//            //    position: absolute;
-//            //    bottom: -2px;
-//            //    left: 0;
-//            //    width: 100%;
-//            //    height: 2px;
-//            //    background: $first-color;
-//            //}
-//        }
-//    }
-//}
-
-/* Styles pour les plats */
-//#plats-grid {
-//    display: none; /* Masquer par défaut */
-//    width: 40rem;
-//    height: 42rem;
-//    max-width: 1200px;
-//    background-repeat: no-repeat;
-//    background-size: 109% 115%;
-//    background-position: center;
-//    padding: 4rem 2.5rem;
-//    margin: 3rem auto; /* Centrer horizontalement */
-//    //min-height: 795px; /* Hauteur minimale pour garantir une taille constante */
-//    background-image: none; /* Par défaut, pas de fond */
-//
-//    &.has-plats {
-//        display: block; /* Afficher lorsque les plats sont chargés */
-//        background-image: url("../images/1.png"); /* Afficher le fond lorsque les plats sont chargés */
-//    }
-//
-//    .plat-card {
-//        display: flex;
-//        flex-direction: column;
-//        margin-bottom: 1rem;
-//
-//        .plat-header {
-//            display: flex;
-//            justify-content: space-between;
-//            align-items: baseline;
-//            width: 100%;
-//            padding: 0.5rem 0;
-//
-//            .plat-title {
-//                font-family: $second-font;
-//                font-size: 25px;
-//                color: $third-color;
-//                text-decoration: none;
-//                transition: color 0.2s;
-//                font-weight: 600;
-//            }
-//
-//            .menu-line {
-//                flex-grow: 1;
-//                border-bottom: 1px dotted $first-color;
-//                margin: 0 14px;
-//                align-self: center;
-//            }
-//
-//            .plat-price {
-//                font-family: $second-font;
-//                font-size: 25px;
-//                font-weight: 700;
-//                color: $third-color;
-//                align-self: center;
-//            }
-//        }
-//
-//        .plat-description {
-//            font-family: $main-font;
-//            font-size: 0.9em;
-//            color: $third-color;
-//            margin-top: 0.3rem;
-//        }
-//
-//        p {
-//            font-family: $second-font;
-//            font-size: 20px;
-//            font-weight: 300;
-//            color: $fourth-color;
-//        }
-//    }
-//
-//    @media (max-width: 768px) {
-//        .plat-card {
-//            width: 100%;
-//        }
-//    }
-//}
 
 .card-title {
     margin: 0;
-    font-size: 1.5em; /* Taille de la police */
-    color: #fff; /* Couleur du texte */
+    font-size: 1.5em; 
+    color: #fff; 
     text-align: center;
     padding: 10px;
-    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+    transition: transform 0.3s ease, color 0.3s ease; 
 }
 
 .formule-content {
-    display: none; /* Masquer par défaut */
+    display: none; 
     width: 40rem;
     height: 42rem;
     max-width: 1200px;
@@ -1575,9 +1436,8 @@ footer {
     background-size: 109% 115%;
     background-position: center;
     padding: 4rem 2.5rem;
-    margin: 0 auto; /* Centrer horizontalement */
-    //min-height: 795px; /* Hauteur minimale pour garantir une taille constante */
-    background-image: none; /* Par défaut, pas de fond */
+    margin: 0 auto; 
+    background-image: none; 
     height: 28rem;
 
     .formule-header {
@@ -1599,55 +1459,78 @@ footer {
             font-size: 1.1em;
             color: #000;
             margin-bottom: 0.5rem;
-            text-align: center; /* Centrer le texte */
+            text-align: center; 
         }
     }
 
     .separator {
         width: 80%;
         height: 1px;
-        background-color: $fourth-color; /* Couleur de la ligne */
-        margin: 2rem auto; /* Espacement autour de la ligne et centrage */
+        background-color: $fourth-color; 
+        margin: 2rem auto; 
     }
 }
 
-
-
     /* ====================== [ Page confidentialité] ====================== */
 
-    .politique-de-confidentialité,
-    .mentions-legales {
-        padding: 8rem 2rem 4rem;
+.politique-de-confidentialité,
+.mentions-legales {
+    padding: 8rem 2rem 4rem;
+    font-family: $main-font;
+    h1 {
+        color: $first-color;
         font-family: $main-font;
-
-        h1 {
-            color: $first-color;
-            font-family: $main-font;
-            font-size: 22px;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            margin-bottom: 1rem;
-            line-height: 27px;
-        }
-
-        h2 {
-            text-decoration: underline;
-            font-size: 18px;
-            margin-bottom: 1rem;
-            margin-top: 1rem;
-        }
-
-        span {
-            color: $first-color;
-            font-weight: 500;
-        }
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        margin-bottom: 1rem;
+        line-height: 27px;
     }
+    h2 {
+        text-decoration: underline;
+        font-size: 18px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+    span {
+        color: $first-color;
+        font-weight: 500;
+    }
+}
+
+    /* ====================== [ 404 ] ====================== */
+
+.site-content {
+    margin-top: 6rem;
+
+    .container {
+
+        @media screen and (min-width: 1280px) {
+            max-width: 1910px !important;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        a {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            color: $second-color;
+            font-family: $main-font;
+            font-size: 20px;
+            background-color: $first-color;
+            width: 100%;
+        }
+
+    }
+}
 
 
 @media screen and (min-width: 768px) {
     .intro {
             flex-direction: row;
-            //margin: 4rem 15rem;
     
             .intro-img-container {
     
@@ -1660,7 +1543,6 @@ footer {
                     }
     
                     img {
-                        //width: 140rem;
                         height: auto;
                     }
 
@@ -1679,9 +1561,7 @@ footer {
             }
     }
 
-        .team {
-            //margin: 9rem 0.5rem;
-    
+        .team {  
             .container-team {
                 padding-top: 3rem ;
                 h2 {
@@ -1692,7 +1572,6 @@ footer {
                 .presentation {
                     display: flex;
                     flex-direction: row-reverse;
-                    //margin: 2rem 18rem;
                     margin-bottom: 3rem;
                 }
     
@@ -1716,11 +1595,11 @@ footer {
                 }
                 .swiper-button-next,
                 .swiper-button-prev {
-                    display: none; // Masquer les boutons sur desktop
+                    display: none; 
                 }
 
                 .swiper-pagination {
-                    display: none; // Masquer la pagination sur desktop
+                    display: none; 
                 }
 
             }
@@ -1728,62 +1607,12 @@ footer {
 
     .boxes {
         .container {
-            //margin: 0 16rem;
             h2 {
                 margin-bottom: 2rem;
                 margin-top: 1rem;
             }
         }
     }
-
-
-    //.portfolio {
-    //    background-color: $fourth-color;
-    //    padding-bottom: 2rem;
-    //    .container_desk {
-    //        display: block;
-    //         max-width: 1200px;
-    //         width: 100%;
-    //        padding: 0 15px;
-    //        margin: 0 auto;
-//
-    //        .gallery {
-    //            position: relative;
-    //            height: 560px;
-//
-    //            .items {
-    //                    padding: 0 15px;
-    //                    margin-bottom: 30px;
-    //                    overflow: hidden;
-    //                    width: 50%;
-//
-    //                &.width2 {
-    //                    width: 25%;
-    //                }
-    //    
-    //                .item-img {
-    //                    overflow: hidden;
-    //
-    //                    &:hover img {
-    //                        transform: scale(1.1);
-    //                            }
-    //    
-    //                    img {
-    //                        transition: all 0.4s;
-    //                        width: 100%;
-    //                        height: auto;
-    //                        vertical-align: middle;
-    //                        border-style: none;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-//
-    //    .container_mobile {
-    //        display: none;
-    //    }
-    //}
 }
 
 @media only screen and (min-width : 600px) and (max-width : 1024px) {
@@ -1917,12 +1746,7 @@ footer {
     }
 }
 
-
-
-
 @media screen and (min-width: 1025px) {
-
-
     header {
 
         .navbar {
@@ -1947,7 +1771,6 @@ footer {
                 }
             }
         }
-
 
         .img-toggle {
             display: none;
@@ -2016,7 +1839,6 @@ footer {
                                     &:hover {
                                         background-color: $first-color;
                                         color: $second-color;
-                                        //width: 11rem;
                                     }
                                 }
                             }
@@ -2072,7 +1894,6 @@ footer {
     }
 
     .hero {
-        //margin-top: 6rem;
         padding: 4rem 0rem 7rem;
 
         .hero-presentation {
@@ -2092,7 +1913,6 @@ footer {
 
             div {
                 padding: 0;
-               // margin-top: 5rem;
                 justify-content: center;
                 flex-direction: row;
 
@@ -2109,7 +1929,6 @@ footer {
                     display: block;
                     width: calc(100% + 1.3px);
                     position: relative;
-                    //left: 50%;
                     transform: rotate(180deg);
 
                 }
@@ -2189,7 +2008,6 @@ footer {
     }
 
     .form {
-        //flex-direction: row; // En ligne pour desktop
         justify-content: space-between;
         padding: 5rem 6rem;
 
@@ -2206,7 +2024,7 @@ footer {
 
         form {
             flex: 1;
-            max-width: 100%; // Limite la largeur du formulaire
+            max-width: 100%; 
         }
 
         .form-name,
@@ -2227,11 +2045,11 @@ footer {
         .map-container {
             flex: 1;
             max-width: 50%;
-            padding-left: 2rem; // Espace entre le formulaire et la carte
+            padding-left: 2rem; 
 
             iframe {
                 width: 100%;
-                height: 100%; // Prend toute la hauteur du conteneur
+                height: 100%; 
             }
         }
     }

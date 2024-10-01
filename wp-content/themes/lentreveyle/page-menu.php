@@ -13,7 +13,7 @@ get_header();
         <?php
         // Récupérer tous les plats
         $menus_args = array(
-            'post_type' => 'dish', // Utilisation de ton CPT 'dish'
+            'post_type' => 'dish', // Utilisation du CPT 'dish'
             'posts_per_page' => -1, // Récupère tous les plats
             'orderby' => 'date', // Trie par date
             'order' => 'ASC' // Ordre croissant (du plus ancien au plus récent)

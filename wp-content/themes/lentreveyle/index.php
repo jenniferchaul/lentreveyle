@@ -77,7 +77,7 @@
         <div class="grid-bx">
             <div class="box box1">
                 <div class="img-box">
-                    <img src="<?= get_theme_file_uri('assets/images/poisson.jpg') ?>" alt="menu de l'Entre Veyle">
+                    <img src="<?= get_theme_file_uri('assets/images/poisson.webp') ?>" alt="menu de l'Entre Veyle" loading="lazy">
                 </div>
                 <h3 class="box-title black">La carte</h3>
                 <p><a href="<?= home_url('/tous-les-plats') ?>">Ouvrir le menu des plats</a></p>
@@ -85,14 +85,14 @@
 
             <div class="box box2">
                 <div class="img-box">
-                    <img src="<?= get_theme_file_uri('assets/images/boissons.jpg') ?>" alt="menu boisson de l'Entre Veyle">
+                    <img src="<?= get_theme_file_uri('assets/images/boissons.webp') ?>" alt="menu boisson de l'Entre Veyle" loading="lazy">
                 </div>
                 <h3 class="box-title white">Les boissons</h3>
                 <?php
                 // Récupération des boissons
                 $drinks_args = array(
-                    'post_type' => 'drink', // Utilisation de ton CPT 'drink'
-                    'posts_per_page' => 1, // Supposons que tu n'as qu'un seul menu pour les boissons
+                    'post_type' => 'drink', // Utilisation du CPT 'drink'
+                    'posts_per_page' => 1, 
                 );
 
                 $drinks = new WP_Query($drinks_args);
@@ -258,10 +258,10 @@
 
     <div class="container_mobile">
     <div>
-        <img src="<?= get_theme_file_uri('assets/images/fond.jpg') ?>" alt="image galerie restaurant">
+        <img src="<?= get_theme_file_uri('assets/images/dessertentreveyle.jpg') ?>" alt="image galerie restaurant">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/grenouilles.jpg') ?>" alt="image galerie grenouilles">
+        <img src="<?= get_theme_file_uri('assets/images/grenouillesjeje.svg') ?>" alt="image galerie grenouilles">
         </div>
         <div>
         <img src="<?= get_theme_file_uri('assets/images/bur.jpg') ?>" alt="image galerie burrata">

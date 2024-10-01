@@ -102,12 +102,12 @@ body, html {
 .progress-wrap::after {
   position: absolute;
   font-family: "Font Awesome 5 Free";
-  content: "\f077";
+  content: "\f077"; /* Flèche vers le haut */
   text-align: center;
   line-height: 44px;
   font-size: 13px;
   font-weight: 900;
-  color: #b7b095;
+  color: #b7b095; /* Utilise $first-color si tu as une variable Sass */
   left: 0;
   top: 0;
   height: 44px;
@@ -123,13 +123,15 @@ body, html {
 .progress-wrap svg.progress-circle path {
   stroke: #b7b095;
   stroke-width: 4;
+  stroke-dasharray: 307.919; /* La longueur totale du chemin */
+  stroke-dashoffset: 307.919; /* Cache le chemin au départ */
+  transition: stroke-dashoffset 400ms linear;
   box-sizing: border-box;
-  transition: all 400ms linear;
 }
 
 header .navbar {
   position: fixed;
-  top: 2px;
+  top: 0px;
   height: 7rem;
   width: 100%;
   z-index: 5;
@@ -730,7 +732,6 @@ header .navbar-content.show ~ .toggle .close-icon {
 }
 
 .portfolio {
-  filter: brightness(0.8);
   background-color: #18181d;
 }
 .portfolio h2 {
@@ -827,8 +828,8 @@ header .navbar-content.show ~ .toggle .close-icon {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 18rem; /* Largeur fixe pour toutes les cartes */
-  height: 18rem; /* Hauteur fixe pour toutes les cartes */
+  width: 18rem;
+  height: 18rem;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1015,8 +1016,13 @@ footer {
 }
 footer .container {
   max-width: 100%;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   margin: auto;
+}
+@media screen and (max-width: 340px) {
+  footer .container {
+    padding: 0px;
+  }
 }
 footer .container h3 {
   color: #b7b095;
@@ -1077,6 +1083,11 @@ footer .container .row-adress .title {
   display: table-cell;
   white-space: nowrap;
   padding-right: 0.5rem;
+}
+@media screen and (max-width: 340px) {
+  footer .container .row-adress .title {
+    padding-right: 0px;
+  }
 }
 footer .container .row-adress .dots {
   height: 4px;
@@ -1189,13 +1200,13 @@ footer .container .ftail .container .legale-notices ul a {
 }
 .plats-container .cards-bx .card .img-card {
   margin: 2rem;
-  overflow: hidden; /* Ensure the zoomed image does not overflow */
+  overflow: hidden;
   position: relative;
 }
 .plats-container .cards-bx .card .img-card img {
   width: 25rem;
-  height: 20rem;
-  transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+  height: auto;
+  transition: transform 0.3s ease;
   display: block;
 }
 .plats-container .cards-bx .card .card-title-container {
@@ -1207,18 +1218,18 @@ footer .container .ftail .container .legale-notices ul a {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  background: rgba(0, 0, 0, 0.5);
 }
 .plats-container .cards-bx .card .card-title-container h3 {
   font-family: "Cormorant", "serif";
   font-weight: 700;
   margin: 0;
-  font-size: 1.5em; /* Taille de la police */
-  color: #fff; /* Couleur du texte */
+  font-size: 1.5em;
+  color: #fff;
   text-align: center;
   padding: 10px;
   position: relative;
-  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 .plats-container .cards-bx .card .card-title-container h3:hover {
   color: #b7b095;
@@ -1254,18 +1265,17 @@ footer .container .ftail .container .legale-notices ul a {
   color: #b7b095;
 }
 
-/* Styles pour les plats */
 .card-title {
   margin: 0;
-  font-size: 1.5em; /* Taille de la police */
-  color: #fff; /* Couleur du texte */
+  font-size: 1.5em;
+  color: #fff;
   text-align: center;
   padding: 10px;
-  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for zoom effect and color change */
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .formule-content {
-  display: none; /* Masquer par défaut */
+  display: none;
   width: 40rem;
   height: 42rem;
   max-width: 1200px;
@@ -1273,8 +1283,8 @@ footer .container .ftail .container .legale-notices ul a {
   background-size: 109% 115%;
   background-position: center;
   padding: 4rem 2.5rem;
-  margin: 0 auto; /* Centrer horizontalement */
-  background-image: none; /* Par défaut, pas de fond */
+  margin: 0 auto;
+  background-image: none;
   height: 28rem;
 }
 .formule-content .formule-header {
@@ -1295,13 +1305,13 @@ footer .container .ftail .container .legale-notices ul a {
   font-size: 1.1em;
   color: #000;
   margin-bottom: 0.5rem;
-  text-align: center; /* Centrer le texte */
+  text-align: center;
 }
 .formule-content .separator {
   width: 80%;
   height: 1px;
-  background-color: #18181d; /* Couleur de la ligne */
-  margin: 2rem auto; /* Espacement autour de la ligne et centrage */
+  background-color: #18181d;
+  margin: 2rem auto;
 }
 
 /* ====================== [ Page confidentialité] ====================== */
@@ -1331,6 +1341,29 @@ footer .container .ftail .container .legale-notices ul a {
 .mentions-legales span {
   color: #b7b095;
   font-weight: 500;
+}
+
+/* ====================== [ 404 ] ====================== */
+.site-content {
+  margin-top: 6rem;
+}
+@media screen and (min-width: 1280px) {
+  .site-content .container {
+    max-width: 1910px !important;
+  }
+}
+.site-content .container img {
+  width: 100%;
+}
+.site-content .container a {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  color: #ffffff;
+  font-family: "Barlow", "sans-serif";
+  font-size: 20px;
+  background-color: #b7b095;
+  width: 100%;
 }
 
 @media screen and (min-width: 768px) {
