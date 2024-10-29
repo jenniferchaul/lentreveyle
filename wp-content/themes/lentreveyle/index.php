@@ -21,7 +21,7 @@
         </div>
 
         <div class="shape-bottom">
-            <img src="<?= get_theme_file_uri('assets/images/img-curve.png') ?>" alt="fond d'écran restaurant l'Entre Veyle">
+            <img src="<?= get_theme_file_uri('assets/images/img-curve.webp') ?>" alt="fond d'écran restaurant l'Entre Veyle">
         </div>
 </section>
 
@@ -56,15 +56,15 @@
         <div class="intro-img">
             <div class="intro-img_left">
                 <div>
-                    <img class="img-border img1" src="<?= get_theme_file_uri('assets/images/burger.png') ?>" alt="photo plat burger" />
+                    <img class="img-border img1" src="<?= get_theme_file_uri('assets/images/burger.webp') ?>" alt="photo plat burger" />
                 </div>
                 <div>
-                    <img class="img-border img2" src="<?= get_theme_file_uri('assets/images/fraises.png') ?>" alt="photo dessert fraises" />
+                    <img class="img-border img2" src="<?= get_theme_file_uri('assets/images/fraises.webp') ?>" alt="photo dessert fraises" />
                 </div>
             </div>
             <div class="intro-img_right">
                 <div>
-                    <img class="img-border img3" src="<?= get_theme_file_uri('assets/images/crevettes.png') ?>" alt="photo plat gambas" />
+                    <img class="img-border img3" src="<?= get_theme_file_uri('assets/images/crevettes.webp') ?>" alt="photo plat gambas" />
                 </div>
             </div>
         </div>
@@ -229,21 +229,21 @@
             <!-- gallery item -->
             <div class="items width2" style="position: absolute; left: 292px; top: 0px;">
                 <div class="item-img">
-                    <img src="<?= get_theme_file_uri('assets/images/entree1.jpg') ?>" alt="image galerie 2">
+                    <img src="<?= get_theme_file_uri('assets/images/entree1.webp') ?>" alt="image galerie 2">
                 </div>
             </div>
 
             <!-- gallery item -->
             <div class="items width2" style="position: absolute; left: 585px; top: 0px;">
                 <div class="item-img">
-                    <img src="<?= get_theme_file_uri('assets/images/saumon_leg1.jpg') ?>" alt="image galerie 3">
+                    <img src="<?= get_theme_file_uri('assets/images/saumon_leg1.webp') ?>" alt="image galerie 3">
                 </div>
             </div>
 
             <!-- gallery item -->
             <div class="items" style="position: absolute; left: 292px; top: 292px;">
                 <div class="item-img">
-                    <img src="<?= get_theme_file_uri('assets/images/table.jpg') ?>" alt="image galerie 4">
+                    <img src="<?= get_theme_file_uri('assets/images/table.webp') ?>" alt="image galerie 4">
                 </div>
             </div>
 
@@ -258,25 +258,25 @@
 
     <div class="container_mobile">
     <div>
-        <img src="<?= get_theme_file_uri('assets/images/dessertentreveyle.jpg') ?>" alt="image galerie restaurant">
+        <img src="<?= get_theme_file_uri('assets/images/dessertentreveyle.webp') ?>" alt="image galerie restaurant">
         </div>
         <div>
         <img src="<?= get_theme_file_uri('assets/images/grenouillesjeje.svg') ?>" alt="image galerie grenouilles">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/bur.jpg') ?>" alt="image galerie burrata">
+        <img src="<?= get_theme_file_uri('assets/images/bur.webp') ?>" alt="image galerie burrata">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/1.jpg') ?>" alt="image galerie poisson">
+        <img src="<?= get_theme_file_uri('assets/images/1.webp') ?>" alt="image galerie poisson">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/saumon_leg.jpg') ?>" alt="image galerie saumon">
+        <img src="<?= get_theme_file_uri('assets/images/saumon_leg.webp') ?>" alt="image galerie saumon">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/entree.jpg') ?>" alt="image galerie entrée">
+        <img src="<?= get_theme_file_uri('assets/images/entree.webp') ?>" alt="image galerie entrée">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/valentin.jpg') ?>" alt="image galerie foie gras">
+        <img src="<?= get_theme_file_uri('assets/images/valentin.webp') ?>" alt="image galerie foie gras">
         </div>
     </div>
 </section>

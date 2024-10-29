@@ -276,10 +276,10 @@ header {
 
 
 .hero {
-    margin-top: 6rem;
+    margin-top: 5rem;
     position: relative;
     width: 100%;
-    background-image: url('../images/fond.jpg');
+    background-image: url('../images/fond.webp');
     background-size: cover;
     background-position: center;
     padding: 4rem 0;
@@ -556,7 +556,7 @@ header {
 .menu-container {
     position: relative;
     width: 100%;
-    background-image: url('../images/bg.jpg');
+    background-image: url('../images/bg.webp');
     background-size: cover;
     background-position: center;
     padding: 2rem 0.5rem;
@@ -617,7 +617,7 @@ header {
     margin-top: 2rem;
     position: relative;
     width: 100%;
-    background-image: url('../images/bg.jpg');
+    background-image: url('../images/bg.webp');
     background-size: cover;
     padding: 2rem 2rem;
     height: auto;
@@ -1895,6 +1895,7 @@ footer {
 
     .hero {
         padding: 4rem 0rem 7rem;
+        margin-top: 5rem;
 
         .hero-presentation {
 

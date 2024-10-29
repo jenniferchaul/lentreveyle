@@ -3,16 +3,16 @@
         <div class="row-social">
             <div class="logo">
                 <a class="logo" href="<?= home_url('/') ?>">
-                    <img class="img-logo" src="<?= get_theme_file_uri('assets/images/lentreveyle.png') ?>" alt="logo">
+                    <img class="img-logo" src="<?= get_theme_file_uri('assets/images/lentreveyle.webp') ?>" alt="logo">
                 </a>
             </div>
 
             <div class="social">
                 <a href="https://www.facebook.com/lentre.veyle" target="_blank" rel="noopener noreferrer">
-                    <img class="facebook" src="<?= get_theme_file_uri('assets/images/facebook-24.png') ?>" alt="link facebook">
+                    <img class="facebook" src="<?= get_theme_file_uri('assets/images/facebook-24.webp') ?>" alt="link facebook">
                 </a>
                 <a href="https://www.tripadvisor.fr/Restaurant_Review-g6826477-d7078128-Reviews-L_Entre_Veyle-Grieges_Ain_Auvergne_Rhone_Alpes.html" target="_blank" rel="noopener noreferrer">
-                    <img class="tripadvisor" src="<?= get_theme_file_uri('assets/images/tripadvisor-24.png') ?>" alt="link tripadvisor">
+                    <img class="tripadvisor" src="<?= get_theme_file_uri('assets/images/tripadvisor-24.webp') ?>" alt="link tripadvisor">
                 </a>
             </div>
         </div>
@@ -73,7 +73,7 @@
                         </div>
                         <div class="dots"></div>
                         <span>
-                            Nous consulter
+                            Ouverture pour les groupes ou soirées à thèmes <br>(nous contacter)
                         </span>
                     </li>
 

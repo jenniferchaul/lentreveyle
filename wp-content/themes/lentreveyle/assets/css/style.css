@@ -282,7 +282,7 @@ header .navbar-content.show ~ .toggle .close-icon {
 }
 
 .hero {
-  margin-top: 6rem;
+  margin-top: 5rem;
   position: relative;
   width: 100%;
   background-image: url("../images/fond.jpg");
@@ -1609,6 +1609,7 @@ footer .container .ftail .container .legale-notices ul a {
   }
   .hero {
     padding: 4rem 0rem 7rem;
+    margin-top: 5rem;
   }
   .hero .hero-presentation h1 {
     font-size: 60px;
