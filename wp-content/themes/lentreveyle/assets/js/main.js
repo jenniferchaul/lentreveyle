@@ -93,5 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButton = document.querySelector('.close-announcement');
+    const announcementOverlay = document.querySelector('.restaurant-announcement-overlay');
+
+    if (closeButton && announcementOverlay) {
+        closeButton.addEventListener('click', function () {
+            announcementOverlay.style.display = 'none';
+        });
+    }
+});
+
+
 
 

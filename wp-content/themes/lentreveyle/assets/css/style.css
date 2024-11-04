@@ -285,7 +285,7 @@ header .navbar-content.show ~ .toggle .close-icon {
   margin-top: 5rem;
   position: relative;
   width: 100%;
-  background-image: url("../images/fond.jpg");
+  background-image: url("../images/fond.webp");
   background-size: cover;
   background-position: center;
   padding: 4rem 0;
@@ -524,7 +524,7 @@ header .navbar-content.show ~ .toggle .close-icon {
 .menu-container {
   position: relative;
   width: 100%;
-  background-image: url("../images/bg.jpg");
+  background-image: url("../images/bg.webp");
   background-size: cover;
   background-position: center;
   padding: 2rem 0.5rem;
@@ -576,7 +576,7 @@ header .navbar-content.show ~ .toggle .close-icon {
   margin-top: 2rem;
   position: relative;
   width: 100%;
-  background-image: url("../images/bg.jpg");
+  background-image: url("../images/bg.webp");
   background-size: cover;
   padding: 2rem 2rem;
   height: auto;
@@ -1175,6 +1175,51 @@ footer .container .ftail .container .legale-notices ul a {
   color: #b7b095;
   font-size: 12px;
   padding-left: 0.2rem;
+}
+
+.restaurant-announcement-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond sombre pour l'arrière-plan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.restaurant-announcement {
+  background-color: #fff;
+  max-width: 790px;
+  width: 100%;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 6px #b7b095 solid;
+}
+
+.restaurant-announcement p {
+  font-size: 28px;
+  color: #333;
+  font-family: "Barlow", "sans-serif";
+}
+
+.close-announcement {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
 }
 
 /* ====================== [ Page menu ] ====================== */

@@ -264,6 +264,82 @@ function jcdevandcode_filter_boissons() {
 add_action('wp_ajax_filter_boissons', 'jcdevandcode_filter_boissons');
 add_action('wp_ajax_nopriv_filter_boissons', 'jcdevandcode_filter_boissons');
 
+// Bannière accueil
+
+// Ajoute une page de réglages pour l'annonce
+function restaurant_announcement_settings() {
+    add_options_page(
+        'Annonce du restaurant',
+        'Annonce du restaurant',
+        'manage_options',
+        'restaurant-announcement',
+        'restaurant_announcement_settings_page'
+    );
+}
+add_action('admin_menu', 'restaurant_announcement_settings');
+
+// Affichage de la page des réglages
+function restaurant_announcement_settings_page() {
+    ?>
+    <div class="wrap">
+        <h1>Annonce du restaurant</h1>
+        <form method="post" action="options.php">
+            <?php
+                settings_fields('restaurant_announcement_options');
+                do_settings_sections('restaurant-announcement');
+                submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+// Initialisation des options de l'annonce
+function restaurant_announcement_settings_init() {
+    add_settings_section(
+        'restaurant_announcement_section',
+        'Configuration de l\'annonce',
+        null,
+        'restaurant-announcement'
+    );
+
+    add_settings_field(
+        'restaurant_announcement_enabled',
+        'Activer l\'annonce',
+        'restaurant_announcement_enabled_render',
+        'restaurant-announcement',
+        'restaurant_announcement_section'
+    );
+
+    add_settings_field(
+        'restaurant_announcement_message',
+        'Message de l\'annonce',
+        'restaurant_announcement_message_render',
+        'restaurant-announcement',
+        'restaurant_announcement_section'
+    );
+
+    register_setting('restaurant_announcement_options', 'restaurant_announcement_enabled');
+    register_setting('restaurant_announcement_options', 'restaurant_announcement_message');
+}
+add_action('admin_init', 'restaurant_announcement_settings_init');
+
+// Champ de l'option "Activer l'annonce"
+function restaurant_announcement_enabled_render() {
+    $enabled = get_option('restaurant_announcement_enabled');
+    ?>
+    <input type="checkbox" name="restaurant_announcement_enabled" value="1" <?php checked(1, $enabled, true); ?>>
+    <?php
+}
+
+// Champ de l'option "Message de l'annonce"
+function restaurant_announcement_message_render() {
+    $message = get_option('restaurant_announcement_message');
+    ?>
+    <textarea name="restaurant_announcement_message" rows="4" cols="50"><?php echo esc_textarea($message); ?></textarea>
+    <?php
+}
+
 
 ?>
 
