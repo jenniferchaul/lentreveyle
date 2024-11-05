@@ -97,12 +97,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeButton = document.querySelector('.close-announcement');
     const announcementOverlay = document.querySelector('.restaurant-announcement-overlay');
 
+    function closeAnnouncement() {
+        // Forcer un "repaint" pour Chrome mobile
+        announcementOverlay.style.display = 'none';
+        void announcementOverlay.offsetHeight; // Déclenche le repaint
+    }
+
     if (closeButton && announcementOverlay) {
-        closeButton.addEventListener('click', function () {
-            announcementOverlay.style.display = 'none';
-        });
+        closeButton.addEventListener('click', closeAnnouncement);
+        closeButton.addEventListener('touchstart', closeAnnouncement); // Pour Chrome mobile
     }
 });
+
 
 
 

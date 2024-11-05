@@ -261,13 +261,13 @@
         <img src="<?= get_theme_file_uri('assets/images/dessertentreveyle.webp') ?>" alt="image galerie restaurant">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/grenouillesjeje.svg') ?>" alt="image galerie grenouilles">
+        <img src="<?= get_theme_file_uri('assets/images/grenouille.webp') ?>" alt="image galerie grenouilles">
         </div>
         <div>
         <img src="<?= get_theme_file_uri('assets/images/bur.webp') ?>" alt="image galerie burrata">
         </div>
         <div>
-        <img src="<?= get_theme_file_uri('assets/images/1.webp') ?>" alt="image galerie poisson">
+        <img src="<?= get_theme_file_uri('assets/images/1_1.webp') ?>" alt="image galerie poisson">
         </div>
         <div>
         <img src="<?= get_theme_file_uri('assets/images/saumon_leg.webp') ?>" alt="image galerie saumon">
@@ -300,7 +300,7 @@
 
         <div class="map-container">
 
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2758.8039259955535!2d4.84820277668618!3d46.25412558038774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f365f3a26c1bb7%3A0xfc5b306d4938f3ed!2sL&#39;Entre%20Veyle!5e0!3m2!1sfr!2sfr!4v1725529095852!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2758.8039259955535!2d4.84820277668618!3d46.25412558038774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f365f3a26c1bb7%3A0xfc5b306d4938f3ed!2sL&#39;Entre%20Veyle!5e0!3m2!1sfr!2sfr!4v1725529095852!5m2!1sfr!2sfr" width="100%" height="300px" style="border:0;"></iframe>
 
         </div>
     </div>

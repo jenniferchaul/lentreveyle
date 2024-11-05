@@ -57,9 +57,10 @@
 
             <nav class="navbar">
                 <div class="container">
-                    <a class="logo" href="<?= home_url('/') ?>">
+                    <div class="navbar-logo"><a class="logo" href="<?= home_url('/') ?>">
                         <img class="img-logo" src="<?= get_theme_file_uri('assets/images/lentreveyle.webp') ?>" alt="logo" loading="lazy">
                     </a>
+                    </div>
                     <div class="navbar-content">
                         <ul class="navbar-nav">
                             <li class="nav-item">

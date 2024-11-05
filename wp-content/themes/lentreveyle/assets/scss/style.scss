@@ -1322,7 +1322,8 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 10000;
+    -webkit-overflow-scrolling: touch;
 }
 
 .restaurant-announcement {
@@ -1355,6 +1356,7 @@ footer {
     font-size: 2rem;
     cursor: pointer;
     color: #333;
+    z-index: 10001;
 }
 
 
@@ -1763,6 +1765,15 @@ footer {
     }
 }
 
+@media only screen and (min-width : 1025px) and (max-width : 1279px) {
+
+        .navbar-content {
+                margin-right: -6rem;
+            }
+}
+
+
+
 @media only screen and (min-width : 1100px) and (max-width : 1400px) {
     .hero {
         .hero-presentation {
@@ -2063,6 +2074,7 @@ footer {
             display: flex;
             justify-content: center;
             margin-top: 2rem;
+            flex-direction: column;
 
         .wpcf7 {
             width: 54rem;
@@ -2092,12 +2104,12 @@ footer {
 
         .map-container {
             flex: 1;
-            max-width: 50%;
-            padding-left: 2rem; 
+            max-width: 100%;
+            //padding-left: 2rem; 
 
             iframe {
                 width: 100%;
-                height: 100%; 
+                height: 300px; 
             }
         }
     }
@@ -2151,7 +2163,7 @@ footer {
 }
 
 
-@media screen and (min-width: 1378px) {
+@media screen and (min-width: 1536px) {
 
     header {
 
@@ -2183,6 +2195,16 @@ footer {
 
         .second-row {
             width: 29rem;
+        }
+    }
+
+    .form-contact {
+        flex-direction: row !important;
+        .map-container {
+            max-width: 50% !important;
+            iframe {
+                height: 389px !important;
+            }
         }
     }
 }
